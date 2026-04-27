@@ -1,0 +1,514 @@
+<!--
+  Coexisting with Whales - Norwegian and surrounding waters.
+  Interactive map of cetacean observations, shipping density and vessel-strike risk.
+
+  Data:
+    data/whales_norway.json   - 10K cetacean observations (GBIF, taxonKey 733)
+    data/sea_regions.geojson  - Norwegian, Barents, North, Greenland Sea (Marine Regions IHO v3)
+    data/coastline.geojson    - Natural Earth 50m, clipped
+    data/eez.geojson          - Norwegian EEZ (mainland + Jan Mayen + Svalbard)
+    data/ports.json           - 25 major Norwegian ports (hand curated)
+
+  Code:
+    css/style.css             - styles with CSS custom properties
+    js/data.js                - constants, species, IUCN, Norwegian Red List 2021
+    js/refs.js                - literature references with DOI hyperlinks
+    js/scoring.js             - pure functions: peer-reviewed collision-risk formulas
+    js/ui.js                  - DOM updates: filters, species list, toggles
+    js/app.js                 - entry point: map init, data loading, events
+
+  Dependencies (loaded from CDN):
+    Leaflet 1.9.4             - map rendering
+    Leaflet.heat 0.2.0        - heatmap layer
+    CARTO dark basemap        - tile layer
+    EMODnet WMS               - vessel density layer (no auth, CORS open)
+
+  No build step. Serve with any static HTTP server.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coexisting with Whales | Norwegian and surrounding waters</title>
+
+    <meta name="description" content="Interactive map of cetacean observations, shipping density and vessel strike risk in Norwegian and surrounding waters. Conservation screening tool with peer-reviewed collision risk formulas.">
+    <meta name="keywords" content="whales, cetaceans, Norway, vessel strike, ship collision, conservation, GBIF, Norwegian Sea, Barents Sea, IUCN red list">
+    <meta name="author" content="Almaz Ermilov">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Coexisting with Whales | Norwegian and surrounding waters">
+    <meta property="og:description" content="Interactive map of cetacean observations and vessel strike risk in Norwegian waters. Built on GBIF, EMODnet and peer-reviewed collision physics.">
+    <meta property="og:url" content="https://almazermilov.github.io/coexisting-with-whales/">
+    <meta property="og:site_name" content="Coexisting with Whales">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="https://almazermilov.github.io/coexisting-with-whales/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Map of Norway showing cetacean observations and shipping density with strike risk scoring">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://almazermilov.github.io/coexisting-with-whales/assets/og-image.png">
+
+    <link rel="canonical" href="https://almazermilov.github.io/coexisting-with-whales/">
+
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="assets/site.webmanifest">
+    <meta name="theme-color" content="#050a14">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Coexisting with Whales",
+        "description": "Interactive map of cetacean observations and vessel strike risk in Norwegian and surrounding waters.",
+        "url": "https://almazermilov.github.io/coexisting-with-whales/",
+        "applicationCategory": "EnvironmentalApplication",
+        "operatingSystem": "Web browser",
+        "isAccessibleForFree": true,
+        "spatialCoverage": [
+            { "@type": "Place", "name": "Norwegian Sea" },
+            { "@type": "Place", "name": "Barents Sea" },
+            { "@type": "Place", "name": "North Sea" },
+            { "@type": "Place", "name": "Greenland Sea" }
+        ],
+        "datePublished": "2026-04-27",
+        "creator": { "@type": "Person", "name": "Almaz Ermilov", "url": "https://www.linkedin.com/in/almazermilov/" },
+        "license": "https://opensource.org/licenses/MIT"
+    }
+    </script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <div id="loading" class="loading">Loading whale and ship data...</div>
+    <main id="map"></main>
+
+    <!-- INFO MODAL: motivation, methods, references -->
+    <div class="modal-overlay" id="info-modal" role="dialog" aria-modal="true" aria-labelledby="info-modal-title">
+        <div class="modal">
+            <button class="modal-close" data-modal="info-modal" aria-label="Close">&times;</button>
+
+            <h2 id="info-modal-title">Coexisting with Whales</h2>
+            <p class="concept-text">
+                Vessel strikes are one of the leading anthropogenic causes of large whale mortality. The Norwegian
+                Sea, Barents Sea and surrounding waters host fin, blue, sperm, humpback and minke whales alongside
+                some of Europe's busiest shipping lanes. This tool overlays cetacean observation density with
+                gridded vessel density and translates the result into a transparent strike-risk score per port and
+                per sea region.
+            </p>
+
+            <div class="motivation-card">
+                <div class="card-title">Why this exists</div>
+                <p style="margin-bottom:6px;">
+                    The Mesh Oslo "What else can you build" prompt highlighted whale incident tracking as an open
+                    problem. Hubocean.earth and the One Ocean Expedition show how rich open ocean data has
+                    become; this app uses a small, public slice of that for a single, pragmatic question: where do
+                    whales and ships overlap, and how does cutting vessel speed change strike lethality.
+                </p>
+                <p style="margin-bottom:0;">
+                    A sister project, <a href="https://coexisting-with-birds.no/" target="_blank" rel="noopener">Coexisting with Birds</a>,
+                    answers the same question for wind farms and birdlife.
+                </p>
+            </div>
+
+            <h3>Conservation status</h3>
+            <p>The map shows two parallel categorisations. The Norwegian Red List 2021 (Artsdatabanken) covers
+                national populations; the global IUCN Red List covers the species worldwide. We display the
+                stricter of the two, and call out the divergence where it matters (e.g. the fin whale is VU
+                globally and LC nationally because the Norwegian feeding population is recovering).</p>
+            <table class="legend-table">
+                <tr><td><span class="rl-badge" style="background:var(--rl-cr);font-size:11px;padding:2px 6px">CR</span></td>
+                    <td><b style="color:#e6edf5">Critically endangered</b><br>Extremely high risk of extinction.</td></tr>
+                <tr><td><span class="rl-badge" style="background:var(--rl-en);font-size:11px;padding:2px 6px">EN</span></td>
+                    <td><b style="color:#e6edf5">Endangered</b><br>Very high risk of extinction.</td></tr>
+                <tr><td><span class="rl-badge" style="background:var(--rl-vu);font-size:11px;padding:2px 6px">VU</span></td>
+                    <td><b style="color:#e6edf5">Vulnerable</b><br>High risk of extinction.</td></tr>
+                <tr><td><span class="rl-badge" style="background:var(--rl-nt);color:#333;font-size:11px;padding:2px 6px">NT</span></td>
+                    <td><b style="color:#e6edf5">Near threatened</b><br>Close to qualifying for a threatened category.</td></tr>
+            </table>
+
+            <h3>Strike vulnerability per species</h3>
+            <p>Risk scales with body size, surface time and overlap with shipping routes. We use the species accounts
+                in <span id="ref-laist"></span>, <span id="ref-rockwood"></span> and <span id="ref-nisi"></span> to
+                classify each cetacean as high, medium or low vulnerability.</p>
+            <table class="legend-table">
+                <tr><td style="color:#ff6b6b;font-size:16px">&#9650;</td>
+                    <td><b style="color:#e6edf5">High vulnerability</b><br>
+                    Large slow surface dwellers. Includes blue, fin, sei, humpback, sperm whale and the North
+                    Atlantic right whale (functionally absent from NE Atlantic but listed for completeness).</td></tr>
+                <tr><td style="color:#fbc02d;font-size:16px">&#9679;</td>
+                    <td><b style="color:#e6edf5">Moderate vulnerability</b><br>
+                    Common minke whale, killer whale, long-finned and short-finned pilot whales.</td></tr>
+                <tr><td style="color:#888;font-size:11px">no icon</td>
+                    <td><b style="color:#e6edf5">Lower vulnerability</b><br>
+                    Agile small cetaceans (porpoises, dolphins) and deep divers (beaked whales). Bycatch and
+                    acoustic disturbance dominate over direct strikes for these species.</td></tr>
+            </table>
+
+            <h3>Heatmap and points</h3>
+            <p>The heatmap uses a 10K stratified sample from GBIF (taxonKey 733) covering the bounding box
+                lat 56-82, lon -10 to 70 across all twelve months. Counts reflect <em>where people record whales</em>,
+                not absolute abundance. Coastal and tourist viewpoints (Andoya, Lofoten, Tromso) are
+                overrepresented. Points view shows individual records colored by species; click a point for
+                details.</p>
+            <table class="legend-table">
+                <tr>
+                    <td style="width:120px"><span class="ship-swatch" style="background:linear-gradient(to right,#001a33,#0078a8,#90e0ef,#caf0f8)"></span></td>
+                    <td>Low to high cetacean observation density</td>
+                </tr>
+                <tr>
+                    <td><svg viewBox="0 0 24 24" width="20" height="20" style="vertical-align:middle"><circle cx="12" cy="12" r="10" fill="#fbc02d" opacity="0.85" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><path d="M12 5 L13.5 9.5 L18 9.5 L14.2 12.2 L15.7 16.5 L12 14 L8.3 16.5 L9.8 12.2 L6 9.5 L10.5 9.5 Z" fill="rgba(255,255,255,0.85)"/></svg></td>
+                    <td>Major Norwegian port (icon size scales with annual cargo throughput)</td>
+                </tr>
+            </table>
+
+            <h3>Per port strike risk</h3>
+            <p style="font-size:11px;color:#99a8bf">Each major port is colored from
+                <span style="color:rgb(0,180,80);font-weight:700">green</span> (low) through
+                <span style="color:rgb(200,150,80);font-weight:700">yellow</span> to
+                <span style="color:rgb(255,0,80);font-weight:700">red</span> (very high) based on a composite
+                weighted score of nearby observations.</p>
+
+            <div class="calc-step">
+                <div class="step-title">Step 1. Find nearby observations</div>
+                <div class="step-body">
+                    For each port, all cetacean observations within a <b>30 km radius</b> are collected.
+                    Distance is computed using a flat earth approximation (sufficient at sub-100 km scales).
+                </div>
+                <div class="formula-block">dx = (obs.lon - port.lon) × 111 × cos(port.lat)
+dy = (obs.lat - port.lat) × 111
+distance = sqrt(dx² + dy²)     // in km</div>
+            </div>
+
+            <div class="calc-step">
+                <div class="step-title">Step 2. Weight each observation</div>
+                <div class="step-body">
+                    Each observation starts with weight 1. Three multipliers are applied: red list weight,
+                    strike vulnerability and a relative speed factor.
+                </div>
+                <table class="legend-table" style="font-size:11px">
+                    <tr><td colspan="2" style="color:#99a8bf;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1)">Red list weight</td></tr>
+                    <tr><td><span class="rl-badge" style="background:var(--rl-cr);font-size:10px;padding:1px 5px">CR</span></td><td>× 8</td></tr>
+                    <tr><td><span class="rl-badge" style="background:var(--rl-en);font-size:10px;padding:1px 5px">EN</span></td><td>× 5</td></tr>
+                    <tr><td><span class="rl-badge" style="background:var(--rl-vu);font-size:10px;padding:1px 5px">VU</span></td><td>× 3</td></tr>
+                    <tr><td><span class="rl-badge" style="background:var(--rl-nt);color:#333;font-size:10px;padding:1px 5px">NT</span></td><td>× 1.5</td></tr>
+                    <tr><td style="color:#888">Least concern (LC) / Data deficient (DD)</td><td>× 1</td></tr>
+                    <tr><td colspan="2" style="color:#99a8bf;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1);padding-top:6px">Strike vulnerability</td></tr>
+                    <tr><td style="color:#ff6b6b">High</td><td>× 3</td></tr>
+                    <tr><td style="color:#fbc02d">Medium</td><td>× 1.5</td></tr>
+                    <tr><td style="color:#888">Low</td><td>× 1</td></tr>
+                </table>
+                <div class="step-body" style="margin-top:6px">
+                    A speed factor scales the score by P_lethal(v) / P_lethal(default), where P_lethal is the
+                    Vanderlaan and Taggart 2007 logistic curve (<span id="ref-vt-step2"></span>). The default
+                    speed is 14 knots.
+                </div>
+            </div>
+
+            <div class="calc-step">
+                <div class="step-title">Step 3. Normalise and color</div>
+                <div class="step-body">
+                    The raw score is divided by 300 (empirical threshold for a 10K sample) and clamped to [0, 1].
+                    Color interpolates green to red.
+                </div>
+                <div class="formula-block">normalized = min(1, score / 300)
+
+Color mapping:
+  0.0 - 0.2  →  green     (low strike risk)
+  0.2 - 0.5  →  yellow    (moderate)
+  0.5 - 0.75 →  orange    (high)
+  0.75 - 1.0 →  red       (very high)</div>
+            </div>
+
+            <h3>Vessel speed and lethality</h3>
+            <p>The probability that a struck large whale dies or is severely injured rises sharply with vessel
+                speed. The single best published curve is the Vanderlaan and Taggart 2007 logistic
+                <span id="ref-vt-formula"></span>:</p>
+            <div class="formula-block">P_lethal(v) = 1 / (1 + exp(-(β₀ + β₁ · v)))
+β₀ = -4.89,  β₁ = 0.41        v in knots
+
+P=0.21 at v= 8.6 kn   (NOAA slow zone target)
+P=0.50 at v=11.8 kn
+P=0.79 at v=15.0 kn   (typical merchant cruising)
+P→1.0  above ~18 kn</div>
+            <p style="font-size:11px;color:#99a8bf">
+                The 10 knot threshold underpinning NOAA's Seasonal Management Areas
+                (<span id="ref-noaa"></span>) and IMO MEPC.1/Circ.674 (<span id="ref-imo"></span>) is set
+                at the value where P_lethal drops below ~27%. Conn and Silber 2013
+                (<span id="ref-conn"></span>) re-fit the same form with a gentler slope and is the curve NOAA
+                cites for North Atlantic right whales today.
+            </p>
+
+            <h3>Encounter rate (advanced)</h3>
+            <p>For per cell mortality, Rockwood et al. 2017 (<span id="ref-rockwood2"></span>) factor the rate of
+                encounters out of the strike physics:</p>
+            <div class="formula-block">λ_e = 2 r_c (v_b + v_w) · I(v_b, v_w) / S
+r_c = (L_whale + W_ship) / 2
+M    = encounters · P_strike_depth · (1 - P_avoidance) · P_lethal(v_b)</div>
+            <p style="font-size:11px;color:#99a8bf">
+                I(v_b, v_w) is the Gerritsen-Strickler velocity correction term; for v_b ≫ v_w it approaches 1.
+                P_strike_depth is the fraction of time the whale is in the hull-swept depth band (typically
+                0.4 to 0.6 from tag data). P_avoidance is the chance of last second evasion (0 by default,
+                conservative).
+            </p>
+            <p style="font-size:11px;color:#99a8bf">
+                Williams and O'Hara 2010 (<span id="ref-williams"></span>) take the simpler co-occurrence
+                approach: relative risk per cell is whale_density × ship_density. Redfern et al. 2013
+                (<span id="ref-redfern"></span>) integrate this along candidate shipping routes, the canonical
+                marine spatial planning citation.
+            </p>
+
+            <h3>Region density layer</h3>
+            <p style="font-size:11px;color:#99a8bf">When toggled on, each sea region is colored by observation
+                count. Empty regions appear in grey, indicating low data confidence rather than absence of
+                whales. With a 10K sample over four large IHO sea areas, expect at most a few thousand records
+                per region.</p>
+
+            <h3>Data sources</h3>
+            <div id="data-sources"></div>
+
+            <h3>Limitations</h3>
+            <p>This is a screening tool, not an environmental impact assessment. Cetacean records reflect
+                observer effort, not true density. EMODnet's vessel density grid is a 2017 to 2024 average.
+                Norwegian-waters specific strike-risk modelling is sparse in the literature; we apply global
+                physics and global species accounts. For real planning, use site specific surveys, Kystverket /
+                BarentsWatch live AIS and modelled species distributions from
+                Havforskningsinstituttet (<span id="ref-imr"></span>).</p>
+
+            <h3>Project</h3>
+            <p style="font-size:11px;color:#99a8bf">
+                Built by <a href="https://www.linkedin.com/in/almazermilov/" target="_blank" rel="noopener">Almaz Ermilov</a>
+                in Oslo, April 2026. MIT licensed, free to fork.
+            </p>
+            <p style="font-size:11px">
+                <a href="https://github.com/AlmazErmilov/coexisting-with-whales" target="_blank" rel="noopener">GitHub repository</a>
+                &nbsp;·&nbsp;
+                <a href="https://coexisting-with-birds.no/" target="_blank" rel="noopener">Coexisting with Birds (sister project)</a>
+                &nbsp;·&nbsp;
+                <a href="https://www.hubocean.earth/" target="_blank" rel="noopener">HUB Ocean (inspiration)</a>
+            </p>
+            <p style="color:#555;font-size:10px;margin-top:12px;text-align:center">
+                All data from open sources. Code is open source under MIT.
+            </p>
+        </div>
+    </div>
+
+    <!-- REGION MODAL: per sea region collision-risk calculator -->
+    <div class="modal-overlay" id="region-modal" role="dialog" aria-modal="true">
+        <div class="modal region-modal">
+            <button class="modal-close" data-modal="region-modal" aria-label="Close">&times;</button>
+            <h2 id="region-name"></h2>
+            <div id="region-stats" style="color:#8b9bb1;font-size:13px;margin-bottom:8px"></div>
+            <div id="region-confidence" class="confidence-warning" style="display:none"></div>
+
+            <div class="region-inputs">
+                <div class="input-group" style="flex:1">
+                    <label for="region-speed">Vessel speed (knots)</label>
+                    <input type="range" id="region-speed" min="6" max="22" step="0.5" value="14">
+                </div>
+                <div class="input-group" style="flex:0 0 140px;text-align:center">
+                    <label>P(lethal)</label>
+                    <div id="region-lethal" style="font-size:24px;font-weight:700;font-family:monospace">-</div>
+                </div>
+            </div>
+            <div id="region-speed-display" class="speed-display"></div>
+
+            <div id="region-risk" style="margin:10px 0;font-size:16px;font-weight:700"></div>
+            <div id="region-species-list"></div>
+            <div style="color:#666;font-size:10px;margin-top:10px;border-top:1px solid rgba(255,255,255,0.1);padding-top:8px">
+                Risk score uses Vanderlaan and Taggart 2007 lethality curve. Speed slider applies a relative
+                factor P_lethal(v) / P_lethal(14 kn).
+            </div>
+        </div>
+    </div>
+
+    <!-- PORT MODAL: per port collision-risk calculator -->
+    <div class="modal-overlay" id="port-modal" role="dialog" aria-modal="true">
+        <div class="modal region-modal">
+            <button class="modal-close" data-modal="port-modal" aria-label="Close">&times;</button>
+            <h2 id="port-name"></h2>
+            <div id="port-meta" style="color:#8b9bb1;font-size:12px;margin-bottom:8px"></div>
+            <div id="port-stats" style="color:#8b9bb1;font-size:13px;margin-bottom:8px"></div>
+
+            <div class="region-inputs">
+                <div class="input-group" style="flex:1">
+                    <label for="port-speed">Vessel speed (knots)</label>
+                    <input type="range" id="port-speed" min="6" max="22" step="0.5" value="14">
+                </div>
+                <div class="input-group" style="flex:0 0 140px;text-align:center">
+                    <label>P(lethal)</label>
+                    <div id="port-lethal" style="font-size:24px;font-weight:700;font-family:monospace">-</div>
+                </div>
+            </div>
+            <div id="port-speed-display" class="speed-display"></div>
+
+            <div id="port-risk" style="margin:10px 0;font-size:16px;font-weight:700"></div>
+            <div id="port-species-list"></div>
+            <div style="color:#666;font-size:10px;margin-top:10px;border-top:1px solid rgba(255,255,255,0.1);padding-top:8px">
+                Score: weighted sum of cetacean observations within 30 km, scaled by Vanderlaan and Taggart
+                lethality at chosen speed.
+            </div>
+        </div>
+    </div>
+
+    <aside class="panel" id="panel">
+        <h1>Coexisting with Whales</h1>
+        <p class="subtitle">Cetacean density and vessel strike risk in Norwegian waters</p>
+        <button class="info-btn" style="margin:6px 0 4px 0">How it works</button>
+
+        <div class="stat-row">
+            <div class="stat-box">
+                <div class="num" id="stat-obs">-</div>
+                <div class="label">Observations</div>
+            </div>
+            <div class="stat-box">
+                <div class="num" id="stat-species">-</div>
+                <div class="label">Species</div>
+            </div>
+        </div>
+
+        <div class="view-toggle">
+            <button class="view-btn active" data-view="heatmap">Heatmap</button>
+            <button class="view-btn" data-view="points">Points</button>
+        </div>
+
+        <div class="filter-section">
+            <label>Species filter</label>
+            <select id="species-filter">
+                <option value="all">All species</option>
+                <option value="great-whales" style="color:#4dd0e1">Great whales (mysticetes + sperm)</option>
+                <option value="threatened" style="color:#ff6b6b">Threatened only (CR/EN/VU)</option>
+                <option value="red-list" style="color:#ff6b6b">Red list (CR/EN/VU/NT)</option>
+                <option value="strike-risk" style="color:#ff6b6b">High and moderate strike risk</option>
+            </select>
+        </div>
+
+        <div class="filter-section">
+            <label>Month</label>
+            <input type="range" id="month-slider" min="0" max="12" value="0">
+            <div class="month-label" id="month-label">All months</div>
+        </div>
+
+        <div class="filter-section">
+            <label>Ports</label>
+            <label class="toggle-label" style="font-size:12px;color:#ccdbe8;display:flex;align-items:center;gap:6px;cursor:pointer">
+                <input type="checkbox" id="port-toggle" checked style="accent-color:#4dd0e1">
+                Show ports (<span id="port-count">0</span>)
+            </label>
+        </div>
+
+        <div class="filter-section">
+            <label>Vessel density (EMODnet)</label>
+            <label class="toggle-label" style="font-size:12px;color:#ccdbe8;display:flex;align-items:center;gap:6px;cursor:pointer">
+                <input type="checkbox" id="ship-toggle" style="accent-color:#4dd0e1">
+                Overlay shipping density
+            </label>
+            <div style="font-size:10px;color:#666;margin-top:3px">2017-2024 annual average, all vessel types</div>
+        </div>
+
+        <div class="filter-section">
+            <label>Sea region density</label>
+            <label class="toggle-label" style="font-size:12px;color:#ccdbe8;display:flex;align-items:center;gap:6px;cursor:pointer">
+                <input type="checkbox" id="confidence-toggle" style="accent-color:#4dd0e1">
+                Color regions by observation count
+            </label>
+            <div style="font-size:10px;color:#666;margin-top:3px">Click a region for the strike risk calculator</div>
+        </div>
+
+        <div class="filter-section">
+            <label>Top species in view</label>
+            <div class="species-list" id="species-list"></div>
+        </div>
+    </aside>
+
+    <div class="legend">
+        <div class="legend-title">Cetacean density</div>
+        <div class="legend-gradient"></div>
+        <div class="legend-labels"><span>Low</span><span>Medium</span><span>High</span></div>
+
+        <div style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px">
+            <div class="legend-title">Conservation status</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+                <span class="rl-badge" style="background:var(--rl-cr)">CR</span>
+                <span class="rl-badge" style="background:var(--rl-en)">EN</span>
+                <span class="rl-badge" style="background:var(--rl-vu)">VU</span>
+                <span class="rl-badge" style="background:var(--rl-nt);color:#333">NT</span>
+            </div>
+        </div>
+
+        <div style="margin-top:8px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px">
+            <div class="legend-title">Port strike risk</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:4px;font-size:10px;color:#8b9bb1">
+                <svg viewBox="0 0 24 24" width="14" height="14"><circle cx="12" cy="12" r="10" fill="rgb(0,180,80)" opacity="0.85"/></svg>
+                <span>Low</span>
+                <svg viewBox="0 0 24 24" width="14" height="14"><circle cx="12" cy="12" r="10" fill="rgb(200,150,80)" opacity="0.85"/></svg>
+                <span>Mod</span>
+                <svg viewBox="0 0 24 24" width="14" height="14"><circle cx="12" cy="12" r="10" fill="rgb(255,0,80)" opacity="0.85"/></svg>
+                <span>High</span>
+            </div>
+        </div>
+
+        <div style="margin-top:8px;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px">
+            <div class="legend-title">Strike vulnerability</div>
+            <div style="display:flex;flex-direction:column;gap:3px;margin-top:4px;font-size:11px">
+                <div style="display:flex;align-items:center;gap:6px">
+                    <span style="color:#ff6b6b;font-size:14px;line-height:1">&#9650;</span>
+                    <span style="color:#ccdbe8">High (large slow whales)</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px">
+                    <span style="color:#fbc02d;font-size:14px;line-height:1">&#9679;</span>
+                    <span style="color:#ccdbe8">Moderate</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-badge">
+        Whales: <a href="https://www.gbif.org/" target="_blank" rel="noopener">GBIF</a> ·
+        Ships: <a href="https://emodnet.ec.europa.eu/en/human-activities" target="_blank" rel="noopener">EMODnet</a>
+    </div>
+
+    <button class="hide-ui-btn" id="hide-ui-btn">
+        Hide UI <span class="shortcut">[H]</span>
+    </button>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script type="module" src="js/app.js"></script>
+
+    <!-- Inject literature reference popups into the info modal once data.js is loaded -->
+    <script type="module">
+        import { refTagHtml, sourceCardHtml } from './js/refs.js';
+        const setRef = (id, key, label) => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = refTagHtml(key, label);
+        };
+        setRef('ref-laist',     'laist-2001',    'Laist 2001');
+        setRef('ref-rockwood',  'rockwood-2017', 'Rockwood 2017');
+        setRef('ref-rockwood2', 'rockwood-2017', 'Rockwood 2017');
+        setRef('ref-nisi',      'nisi-2024',     'Nisi 2024');
+        setRef('ref-vt-step2',  'vanderlaan-2007', 'Vanderlaan 2007');
+        setRef('ref-vt-formula','vanderlaan-2007', 'Vanderlaan 2007');
+        setRef('ref-noaa',      'noaa-narw-2020', 'NOAA 2020');
+        setRef('ref-imo',       'imo-mepc-674',  'IMO 2009');
+        setRef('ref-conn',      'conn-2013',     'Conn 2013');
+        setRef('ref-williams',  'williams-2010', 'Williams 2010');
+        setRef('ref-redfern',   'redfern-2013',  'Redfern 2013');
+        setRef('ref-imr',       'imr',           'IMR');
+
+        const sourcesEl = document.getElementById('data-sources');
+        if (sourcesEl) {
+            const order = ['gbif', 'emodnet-ais', 'marine-regions', 'natural-earth',
+                'artsdatabanken', 'iucn-cetaceans', 'ospar', 'ascobans', 'nammco',
+                'vanderlaan-2007', 'conn-2013', 'rockwood-2017', 'williams-2010',
+                'redfern-2013', 'laist-2001', 'nisi-2024', 'noaa-narw-2020',
+                'imo-mepc-674', 'iwc-strikes', 'nilssen-2021', 'imr'];
+            sourcesEl.innerHTML = order.map(k => sourceCardHtml(k)).join('');
+        }
+    </script>
+</body>
+</html>

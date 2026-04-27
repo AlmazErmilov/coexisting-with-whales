@@ -1,0 +1,11 @@
+{
+    "name": "Coexisting with Whales",
+    "short_name": "Whales",
+    "icons": [
+        { "src": "favicon.svg", "type": "image/svg+xml", "sizes": "any" }
+    ],
+    "theme_color": "#050a14",
+    "background_color": "#050a14",
+    "display": "standalone",
+    "start_url": "/coexisting-with-whales/"
+}
