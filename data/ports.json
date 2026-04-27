@@ -1,0 +1,184 @@
+{
+  "ports": [
+    {
+      "name": "Oslo",
+      "lat": 59.91,
+      "lon": 10.75,
+      "type": "container",
+      "throughput_mt": 5.5
+    },
+    {
+      "name": "Bergen",
+      "lat": 60.39,
+      "lon": 5.32,
+      "type": "general",
+      "throughput_mt": 92.0
+    },
+    {
+      "name": "Stavanger",
+      "lat": 58.97,
+      "lon": 5.73,
+      "type": "general",
+      "throughput_mt": 9.0
+    },
+    {
+      "name": "Trondheim",
+      "lat": 63.43,
+      "lon": 10.4,
+      "type": "general",
+      "throughput_mt": 3.6
+    },
+    {
+      "name": "Tromso",
+      "lat": 69.65,
+      "lon": 18.96,
+      "type": "general",
+      "throughput_mt": 2.1
+    },
+    {
+      "name": "Bodo",
+      "lat": 67.28,
+      "lon": 14.4,
+      "type": "general",
+      "throughput_mt": 1.4
+    },
+    {
+      "name": "Kristiansand",
+      "lat": 58.15,
+      "lon": 7.99,
+      "type": "general",
+      "throughput_mt": 5.2
+    },
+    {
+      "name": "Alesund",
+      "lat": 62.47,
+      "lon": 6.15,
+      "type": "general",
+      "throughput_mt": 4.5
+    },
+    {
+      "name": "Hammerfest",
+      "lat": 70.66,
+      "lon": 23.68,
+      "type": "lng",
+      "throughput_mt": 6.3
+    },
+    {
+      "name": "Kirkenes",
+      "lat": 69.73,
+      "lon": 30.05,
+      "type": "general",
+      "throughput_mt": 2.0
+    },
+    {
+      "name": "Narvik",
+      "lat": 68.43,
+      "lon": 17.43,
+      "type": "iron-ore",
+      "throughput_mt": 24.0
+    },
+    {
+      "name": "Mongstad",
+      "lat": 60.82,
+      "lon": 5.04,
+      "type": "oil",
+      "throughput_mt": 30.0
+    },
+    {
+      "name": "Karsto",
+      "lat": 59.27,
+      "lon": 5.51,
+      "type": "gas",
+      "throughput_mt": 16.0
+    },
+    {
+      "name": "Sture",
+      "lat": 60.62,
+      "lon": 4.86,
+      "type": "oil",
+      "throughput_mt": 13.0
+    },
+    {
+      "name": "Mosjoen",
+      "lat": 65.84,
+      "lon": 13.2,
+      "type": "general",
+      "throughput_mt": 1.0
+    },
+    {
+      "name": "Sandnessjoen",
+      "lat": 66.02,
+      "lon": 12.63,
+      "type": "general",
+      "throughput_mt": 0.8
+    },
+    {
+      "name": "Honningsvag",
+      "lat": 70.98,
+      "lon": 25.97,
+      "type": "fishing",
+      "throughput_mt": 0.5
+    },
+    {
+      "name": "Vardo",
+      "lat": 70.37,
+      "lon": 31.1,
+      "type": "fishing",
+      "throughput_mt": 0.4
+    },
+    {
+      "name": "Vadso",
+      "lat": 70.07,
+      "lon": 29.74,
+      "type": "fishing",
+      "throughput_mt": 0.3
+    },
+    {
+      "name": "Harstad",
+      "lat": 68.8,
+      "lon": 16.54,
+      "type": "general",
+      "throughput_mt": 1.0
+    },
+    {
+      "name": "Svolvaer",
+      "lat": 68.23,
+      "lon": 14.57,
+      "type": "fishing",
+      "throughput_mt": 0.6
+    },
+    {
+      "name": "Floro",
+      "lat": 61.6,
+      "lon": 5.03,
+      "type": "fishing",
+      "throughput_mt": 0.7
+    },
+    {
+      "name": "Maloy",
+      "lat": 61.93,
+      "lon": 5.11,
+      "type": "fishing",
+      "throughput_mt": 0.6
+    },
+    {
+      "name": "Haugesund",
+      "lat": 59.41,
+      "lon": 5.27,
+      "type": "general",
+      "throughput_mt": 1.0
+    },
+    {
+      "name": "Egersund",
+      "lat": 58.45,
+      "lon": 5.99,
+      "type": "fishing",
+      "throughput_mt": 0.6
+    }
+  ],
+  "metadata": {
+    "source": "Hand curated from Wikipedia 'List of ports in Norway' and Kystverket",
+    "count": 25,
+    "throughput_unit": "million tonnes per year (approximate)"
+  }
+}
