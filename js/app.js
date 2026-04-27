@@ -152,9 +152,9 @@ Promise.all([
             const portColor = scoreToColor(normScore);
             const sz = Math.max(14, Math.min(28, Math.sqrt(port.throughput_mt) * 4));
             const icon = L.divIcon({
-                html: `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" style="filter:drop-shadow(0 2px 6px rgba(0,0,0,0.8))">
-                    <circle cx="12" cy="12" r="10" fill="${portColor}" opacity="0.85" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
-                    <path d="M12 5 L13.5 9.5 L18 9.5 L14.2 12.2 L15.7 16.5 L12 14 L8.3 16.5 L9.8 12.2 L6 9.5 L10.5 9.5 Z" fill="rgba(255,255,255,0.85)"/>
+                html: `<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" style="filter:drop-shadow(0 3px 9px rgba(0,0,0,0.75))">
+                    <path d="M12 2.8 L20.5 9.8 L17.6 21.2 H6.4 L3.5 9.8 Z" fill="${portColor}" opacity="0.92" stroke="rgba(255,255,255,0.68)" stroke-width="1"/>
+                    <path d="M8 12.2 H16 M12 7.2 V16.8 M9.5 15.2 C10.4 16.3 11.1 16.8 12 16.8 C12.9 16.8 13.6 16.3 14.5 15.2" fill="none" stroke="rgba(6,16,23,0.82)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>`,
                 className: 'port-marker',
                 iconSize: [sz, sz],
@@ -197,8 +197,8 @@ Promise.all([
         max: 0.6,
         minOpacity: 0.3,
         gradient: {
-            0.1: '#001a33', 0.25: '#003d6b', 0.4: '#0078a8',
-            0.55: '#00b4d8', 0.7: '#90e0ef', 0.85: '#caf0f8', 1.0: '#ffffff',
+            0.1: '#071722', 0.25: '#125374', 0.4: '#168ba4',
+            0.58: '#55d8d2', 0.75: '#b1fff1', 0.92: '#ffb25c', 1.0: '#fff4d8',
         },
     }).addTo(map);
 

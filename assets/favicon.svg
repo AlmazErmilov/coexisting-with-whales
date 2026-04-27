@@ -1,8 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#050a14"/>
-  <path d="M8 38 C 18 26, 30 22, 44 26 C 50 28, 55 33, 56 40 C 50 39, 44 41, 38 44 C 30 48, 20 47, 12 44 C 9 43, 7 41, 8 38 Z"
-        fill="#4dd0e1"/>
-  <path d="M44 28 C 50 26, 55 27, 58 30 L 56 38 C 52 34, 48 31, 44 28 Z" fill="#4dd0e1" opacity="0.9"/>
-  <circle cx="48" cy="33" r="1.6" fill="#050a14"/>
-  <path d="M22 40 Q 26 32, 32 38" stroke="#90e0ef" stroke-width="1.4" fill="none" opacity="0.9"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e2630"/>
+      <stop offset="1" stop-color="#041016"/>
+    </linearGradient>
+    <linearGradient id="whale" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b1fff1"/>
+      <stop offset="1" stop-color="#2bc2bd"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="url(#bg)"/>
+  <path d="M8 43 H56" stroke="#ffb25c" stroke-width="2" stroke-linecap="round" opacity="0.75"/>
+  <path d="M11 38 C 20 26, 34 22, 47 28 C 53 31, 57 35, 58 41 C 51 40, 45 43, 38 46 C 28 50, 17 47, 11 42 C 8 40, 8 37, 11 38 Z" fill="url(#whale)"/>
+  <path d="M45 28 C 52 24, 58 26, 61 31 C 56 31, 53 34, 51 39 C 49 34, 47 31, 45 28 Z" fill="#ffb25c"/>
+  <path d="M20 40 C 26 34, 33 34, 39 38" fill="none" stroke="#041016" stroke-width="2.2" stroke-linecap="round" opacity="0.42"/>
+  <circle cx="48" cy="33" r="1.7" fill="#041016"/>
+  <path d="M34 20 C 36 13, 40 10, 44 8" fill="none" stroke="#b1fff1" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M38 21 C 43 16, 48 14, 54 14" fill="none" stroke="#b1fff1" stroke-width="2.2" stroke-linecap="round" opacity="0.58"/>
 </svg>

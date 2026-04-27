@@ -1,5 +1,14 @@
 # Progress log
 
+## 2026-04-27 - visual polish pass
+
+Refined the public interface with a colder ocean instrument panel style, updated the brand mark, favicon, touch icon and open graph image.
+
+- Tightened the control panel, stats, segmented view toggle, modal, legend and Leaflet popup styling.
+- Reworked port markers from generic stars to harbor shaped risk markers while keeping the existing risk color scale.
+- Updated the heatmap palette to blend teal observation density with warm high density highlights.
+- Verified the static app in desktop and mobile browser viewports.
+
 ## 2026-04-27 - initial release
 
 Built end to end as a sister project to Coexisting with Birds. Adapts the same architecture (static HTML/JS, Leaflet, no build step) to whales and shipping in Norwegian waters.
