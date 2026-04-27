@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/favicon.svg" alt="Coexisting with Whales icon" width="92" height="92">
+</p>
+
 # Coexisting with Whales
 
 Interactive map of cetacean observations and vessel strike risk in Norwegian and surrounding waters. A pre stage screening tool for understanding where whales and ships overlap, and how cutting vessel speed changes strike lethality.
@@ -13,7 +17,7 @@ python3 -m http.server 8081
 # open http://localhost:8081
 ```
 
-No build step. Static files served from any HTTP server. The site loads Leaflet, Leaflet.heat and the CARTO dark basemap from CDNs.
+No build step. Static files served from any HTTP server. The site loads Leaflet, Leaflet.heat and CARTO basemaps from CDNs.
 
 ### Running tests
 
@@ -37,6 +41,7 @@ npm run test:e2e
 - **EMODnet vessel density overlay**: 1 km resolution shipping density grid from EMODnet Human Activities, togglable via a single checkbox (no API key, no auth).
 - **Sea region density layer**: each region coloured by observation count to show data confidence.
 - **Literature popups**: every formula and dataset has a hover popup with the citation and a DOI hyperlink (Vanderlaan and Taggart 2007, Conn and Silber 2013, Rockwood et al. 2017, Williams and O'Hara 2010, Redfern et al. 2013, Laist et al. 2001, Nisi et al. 2024 and more).
+- **Light and dark themes**: switch between ocean night mode and a daylight chart style; the map basemap changes with the interface theme.
 - **Hide UI**: toggle all overlays with a button or the [H] key for a clean map view.
 
 ## Datasets

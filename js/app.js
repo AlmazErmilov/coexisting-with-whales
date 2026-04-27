@@ -20,6 +20,79 @@ let portLayer = null;
 let shipDensityLayer = null;
 let coastlineLayer = null;
 let eezLayer = null;
+let baseLayer = null;
+
+const THEMES = {
+    dark: {
+        label: 'Switch to light theme',
+        next: 'light',
+        tileUrl: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        themeColor: '#061017',
+        coastline: 'rgba(255,255,255,0.18)',
+        eez: 'rgba(124,231,215,0.30)',
+        region: 'rgba(124,231,215,0.18)',
+    },
+    light: {
+        label: 'Switch to dark theme',
+        next: 'dark',
+        tileUrl: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        themeColor: '#eef6f4',
+        coastline: 'rgba(10,45,55,0.28)',
+        eez: 'rgba(8,127,125,0.38)',
+        region: 'rgba(8,127,125,0.28)',
+    },
+};
+
+function currentTheme() {
+    return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+}
+
+function themedLayerStyle(kind) {
+    const theme = THEMES[currentTheme()];
+    if (kind === 'coastline') {
+        return { color: theme.coastline, weight: 0.6, fillOpacity: 0 };
+    }
+    if (kind === 'eez') {
+        return { color: theme.eez, weight: 1, dashArray: '6,4', fillOpacity: 0 };
+    }
+    return {
+        color: theme.region,
+        weight: 0.8,
+        fillColor: 'transparent',
+        fillOpacity: 0,
+    };
+}
+
+function updateThemeButton() {
+    const btn = document.getElementById('theme-btn');
+    if (!btn) return;
+    const theme = THEMES[currentTheme()];
+    btn.setAttribute('aria-label', theme.label);
+    btn.setAttribute('title', `${theme.label} [T]`);
+}
+
+function applyTheme(themeName) {
+    const themeKey = themeName === 'light' ? 'light' : 'dark';
+    const theme = THEMES[themeKey];
+    document.documentElement.dataset.theme = themeKey;
+    localStorage.setItem('whales-theme', themeKey);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme.themeColor);
+
+    if (baseLayer) {
+        map.removeLayer(baseLayer);
+    }
+    baseLayer = L.tileLayer(theme.tileUrl, { maxZoom: 18 }).addTo(map);
+    baseLayer.bringToBack();
+
+    if (coastlineLayer) coastlineLayer.setStyle(themedLayerStyle('coastline'));
+    if (eezLayer) eezLayer.setStyle(themedLayerStyle('eez'));
+    if (regionLayer) regionLayer.setStyle(themedLayerStyle('region'));
+    updateThemeButton();
+}
+
+function toggleTheme() {
+    applyTheme(THEMES[currentTheme()].next);
+}
 
 // Init map centered on the Norwegian Sea (between mainland Norway and Svalbard).
 const map = L.map('map', {
@@ -37,9 +110,7 @@ L.control.attribution({ position: 'bottomright', prefix: false }).addAttribution
     '© OpenStreetMap · CARTO · GBIF · EMODnet · Marine Regions · Natural Earth'
 ).addTo(map);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    maxZoom: 18,
-}).addTo(map);
+applyTheme(currentTheme());
 
 // Load data.
 Promise.all([
@@ -75,7 +146,7 @@ Promise.all([
     // Coastline (subtle line, no fill).
     if (coastlineGeoJSON) {
         coastlineLayer = L.geoJSON(coastlineGeoJSON, {
-            style: { color: 'rgba(255,255,255,0.18)', weight: 0.6, fillOpacity: 0 },
+            style: themedLayerStyle('coastline'),
             interactive: false,
         }).addTo(map);
     }
@@ -83,7 +154,7 @@ Promise.all([
     // EEZ (very subtle dashed line).
     if (eezGeoJSON) {
         eezLayer = L.geoJSON(eezGeoJSON, {
-            style: { color: 'rgba(77,208,225,0.3)', weight: 1, dashArray: '6,4', fillOpacity: 0 },
+            style: themedLayerStyle('eez'),
             interactive: false,
         }).addTo(map);
     }
@@ -91,12 +162,7 @@ Promise.all([
     // Sea regions.
     if (seaRegions) {
         regionLayer = L.geoJSON(seaRegions, {
-            style: {
-                color: 'rgba(77,208,225,0.18)',
-                weight: 0.8,
-                fillColor: 'transparent',
-                fillOpacity: 0,
-            },
+            style: themedLayerStyle('region'),
             onEachFeature: (feature, layer) => {
                 const name = feature.properties.name || feature.properties.NAME || 'Sea region';
                 layer.bindTooltip(escapeHtml(name), {
@@ -412,6 +478,7 @@ Promise.all([
 
 // Global event listeners (need to work before data loads).
 document.getElementById('hide-ui-btn').addEventListener('click', toggleUI);
+document.getElementById('theme-btn').addEventListener('click', toggleTheme);
 
 ['info-modal', 'region-modal', 'port-modal'].forEach(id => {
     const el = document.getElementById(id);
@@ -431,4 +498,5 @@ document.addEventListener('keydown', function (e) {
     }
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === 'h' || e.key === 'H') toggleUI();
+    if (e.key === 't' || e.key === 'T') toggleTheme();
 });

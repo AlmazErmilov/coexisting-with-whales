@@ -1,5 +1,13 @@
 # Progress log
 
+## 2026-04-27 - light theme and brand polish
+
+Added a light chart theme alongside the dark ocean theme. The theme switch updates the UI, browser theme color and CARTO basemap, and persists the user's choice locally.
+
+- Added a theme button with keyboard shortcut `T`.
+- Updated README branding with the project icon and theme note.
+- Confirmed the local image CLI accepts `--model gpt-image-2`, but kept this pass on SVG assets because `OPENAI_API_KEY` was not available for a live image generation call in this environment.
+
 ## 2026-04-27 - visual polish pass
 
 Refined the public interface with a colder ocean instrument panel style, updated the brand mark, favicon, touch icon and open graph image.

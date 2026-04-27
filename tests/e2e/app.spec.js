@@ -70,6 +70,15 @@ test('Hide UI button toggles panels', async ({ page }) => {
     await expect(panel).toBeVisible();
 });
 
+test('theme toggle switches the document theme', async ({ page }) => {
+    const html = page.locator('html');
+    const initial = await html.getAttribute('data-theme');
+    await page.click('#theme-btn');
+    await expect(html).toHaveAttribute('data-theme', initial === 'light' ? 'dark' : 'light');
+    await page.click('#theme-btn');
+    await expect(html).toHaveAttribute('data-theme', initial || 'dark');
+});
+
 test('keyboard H toggles UI', async ({ page }) => {
     await page.keyboard.press('h');
     await expect(page.locator('#panel')).toBeHidden();

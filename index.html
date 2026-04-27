@@ -57,6 +57,13 @@
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
     <link rel="manifest" href="assets/site.webmanifest">
     <meta name="theme-color" content="#061017">
+    <script>
+        (() => {
+            const saved = localStorage.getItem('whales-theme');
+            const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+            document.documentElement.dataset.theme = saved || (prefersLight ? 'light' : 'dark');
+        })();
+    </script>
 
     <script type="application/ld+json">
     {
@@ -484,6 +491,11 @@ M    = encounters · P_strike_depth · (1 - P_avoidance) · P_lethal(v_b)</div>
         Whales: <a href="https://www.gbif.org/" target="_blank" rel="noopener">GBIF</a> ·
         Ships: <a href="https://emodnet.ec.europa.eu/en/human-activities" target="_blank" rel="noopener">EMODnet</a>
     </div>
+
+    <button class="theme-btn" id="theme-btn" aria-label="Switch to light theme" title="Switch theme [T]">
+        <span class="theme-icon" aria-hidden="true"></span>
+        <span class="theme-text">Theme</span>
+    </button>
 
     <button class="hide-ui-btn" id="hide-ui-btn">
         Hide UI <span class="shortcut">[H]</span>
