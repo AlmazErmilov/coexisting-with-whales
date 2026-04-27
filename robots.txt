@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://almazermilov.github.io/coexisting-with-whales/sitemap.xml
