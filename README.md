@@ -2,7 +2,7 @@
 
 Interactive map of cetacean observations and vessel strike risk in Norwegian and surrounding waters. A pre stage screening tool for understanding where whales and ships overlap, and how cutting vessel speed changes strike lethality.
 
-**Live demo**: https://almazermilov.github.io/coexisting-with-whales/
+**Live demo**: https://coexisting-with-whales.no/
 
 A sister project to [Coexisting with Birds](https://coexisting-with-birds.no/), inspired in part by the [HUB Ocean](https://www.hubocean.earth/) initiative and the Mesh Oslo "what else can you build" prompt.
 
