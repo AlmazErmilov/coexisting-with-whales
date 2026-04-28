@@ -1,0 +1,57 @@
+cff-version: 1.2.0
+title: "Coexisting with Whales"
+message: "If you reference this work, please cite it as below."
+type: software
+authors:
+  - family-names: "Ermilov"
+    given-names: "Almaz"
+    orcid: ""
+abstract: >-
+  Interactive map of cetacean observations and vessel strike risk in Norwegian
+  and surrounding waters. Builds a transparent screening score per port and per
+  sea region by combining GBIF cetacean records, EMODnet vessel density and the
+  Vanderlaan and Taggart 2007 logistic curve for vessel-strike lethality.
+keywords:
+  - cetaceans
+  - whales
+  - Norway
+  - vessel strike
+  - ship strike
+  - GBIF
+  - EMODnet
+  - conservation
+  - data visualization
+license: MIT
+repository-code: "https://github.com/AlmazErmilov/coexisting-with-whales"
+url: "https://coexisting-with-whales.no/"
+references:
+  - type: article
+    authors:
+      - family-names: "Vanderlaan"
+        given-names: "A. S. M."
+      - family-names: "Taggart"
+        given-names: "C. T."
+    year: 2007
+    title: "Vessel collisions with whales: the probability of lethal injury based on vessel speed"
+    journal: "Marine Mammal Science"
+    volume: 23
+    issue: 1
+    start: 144
+    end: 156
+    doi: "10.1111/j.1748-7692.2006.00098.x"
+  - type: article
+    authors:
+      - family-names: "Rockwood"
+        given-names: "R. C."
+      - family-names: "Calambokidis"
+        given-names: "J."
+      - family-names: "Jahncke"
+        given-names: "J."
+    year: 2017
+    title: "High mortality of blue, humpback and fin whales from modeling of vessel collisions on the U.S. West Coast"
+    journal: "PLOS ONE"
+    volume: 12
+    issue: 8
+    doi: "10.1371/journal.pone.0183052"
+date-released: 2026-04-27
+version: 1.0.0

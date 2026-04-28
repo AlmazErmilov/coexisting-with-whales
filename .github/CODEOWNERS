@@ -1,0 +1,6 @@
+# All changes default to the project lead.
+*       @AlmazErmilov
+
+# Documentation can be reviewed independently.
+/docs/  @AlmazErmilov
+/README.md @AlmazErmilov

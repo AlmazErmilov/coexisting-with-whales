@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Sister project
+    url: https://coexisting-with-birds.no/
+    about: Coexisting with Birds - the same idea applied to wind farms.
+  - name: GBIF data licensing
+    url: https://www.gbif.org/terms
+    about: For questions about the underlying cetacean observations.
