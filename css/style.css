@@ -37,6 +37,12 @@
     --risk-high: #ff5e72;
     --risk-medium: #ffb25c;
     --risk-low: #7ce7d7;
+
+    /* Ship density swatch (mirrors the on-map appearance after the
+       grayscale + sepia + hue-rotate filter on .ship-density-pane). */
+    --ship-low: rgba(120, 60, 200, 0.25);
+    --ship-mid: #7e3a93;
+    --ship-high: #d050ff;
 }
 
 :root[data-theme="light"] {
@@ -68,6 +74,10 @@
     --risk-high: #d43f5a;
     --risk-medium: #c96c1b;
     --risk-low: #087f7d;
+
+    --ship-low: rgba(20, 50, 100, 0.22);
+    --ship-mid: #1a3a78;
+    --ship-high: #0d2654;
 }
 
 @font-face { font-family: 'Roboto Mono'; font-weight: 300; src: url('../fonts/RobotoMono-Light.ttf') format('truetype'); }
@@ -97,7 +107,12 @@ body::before {
         radial-gradient(circle at 88% 72%, var(--ambient-b), transparent 30%);
     background-size: 64px 64px, 64px 64px, auto, auto;
     mix-blend-mode: screen;
+    transition: opacity 0.25s ease;
 }
+
+/* When the EMODnet ship density layer is on, fade the ambient grid so the
+   shipping lanes read clearly instead of competing with the background. */
+body.ship-active::before { opacity: 0.4; }
 
 #map {
     position: fixed;
@@ -374,7 +389,16 @@ input[type="checkbox"] {
     height: 12px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 3px;
-    background: linear-gradient(to right, #071722, #125374, #168ba4, #55d8d2, #d5fff4);
+    background: linear-gradient(to right,
+        #071722, #125374, #168ba4, #55d8d2, #b1fff1, #ffb25c);
+}
+
+/* Mirrors the magenta-violet (dark) or deep navy (light) appearance of the
+   EMODnet vessel density tiles after the .ship-density-pane CSS filter. */
+.ship-gradient {
+    background: linear-gradient(to right,
+        var(--ship-low), var(--ship-mid), var(--ship-high));
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
 .legend-labels {
@@ -861,6 +885,22 @@ input[type="checkbox"] {
 
 .region-tooltip::before { display: none !important; }
 .ship-marker, .port-marker { background: none !important; border: none !important; }
+
+/* Recolour the EMODnet vessel density tiles so its default green-yellow-red
+   palette does not compete with the teal-orange whale heatmap.
+   Dark theme: single magenta-violet hue, screen-blended over the dark base.
+   Light theme: deep navy hue, multiply-blended over the light base. */
+.leaflet-pane.ship-density-pane {
+    filter: grayscale(1) contrast(1.35) brightness(1.08) sepia(1)
+            hue-rotate(248deg) saturate(2.6);
+    mix-blend-mode: screen;
+}
+
+:root[data-theme="light"] .leaflet-pane.ship-density-pane {
+    filter: grayscale(1) contrast(1.55) brightness(0.92) sepia(1)
+            hue-rotate(195deg) saturate(2.4);
+    mix-blend-mode: multiply;
+}
 
 .leaflet-popup-content-wrapper {
     color: var(--text-primary) !important;

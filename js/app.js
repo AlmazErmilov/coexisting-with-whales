@@ -110,6 +110,15 @@ L.control.attribution({ position: 'bottomright', prefix: false }).addAttribution
     '© OpenStreetMap · CARTO · GBIF · EMODnet · Marine Regions · Natural Earth'
 ).addTo(map);
 
+// Dedicated pane for the EMODnet ship density layer so its CSS filter
+// (which retones EMODnet's default rainbow palette into a single hue that
+// does not clash with the teal/orange whale heatmap) does not bleed into
+// the basemap or the whale layers. The custom class lets CSS target the
+// pane without depending on Leaflet's internal naming convention.
+const shipPane = map.createPane('ships');
+shipPane.classList.add('ship-density-pane');
+shipPane.style.zIndex = 250;
+
 applyTheme(currentTheme());
 
 // Load data.
@@ -199,7 +208,8 @@ Promise.all([
         format: 'image/png',
         transparent: true,
         version: '1.3.0',
-        opacity: 0.55,
+        opacity: 0.65,
+        pane: 'ships',
     });
     // Off by default; user toggles with the checkbox.
 
@@ -256,12 +266,17 @@ Promise.all([
     }
 
     // Init layers.
+    // Tuning notes:
+    //   radius=17, blur=12 keep clusters compact at zoom 4-6 and prevent
+    //     single observations from inflating into open-ocean ghosts.
+    //   minOpacity=0.05 lets isolated points fade out below visibility while
+    //     the gradient's first stop still defines colour for real clusters.
     const heatLayer = L.heatLayer([], {
-        radius: 22,
-        blur: 18,
+        radius: 17,
+        blur: 12,
         maxZoom: 11,
         max: 0.6,
-        minOpacity: 0.3,
+        minOpacity: 0.05,
         gradient: {
             0.1: '#071722', 0.25: '#125374', 0.4: '#168ba4',
             0.58: '#55d8d2', 0.75: '#b1fff1', 0.92: '#ffb25c', 1.0: '#fff4d8',
@@ -283,8 +298,12 @@ Promise.all([
     document.getElementById('month-slider').addEventListener('input', applyFilters);
     document.getElementById('port-toggle').addEventListener('change', () => togglePorts(portLayer));
     document.getElementById('ship-toggle').addEventListener('change', (e) => {
-        if (e.target.checked) { map.addLayer(shipDensityLayer); }
+        const on = e.target.checked;
+        if (on) { map.addLayer(shipDensityLayer); }
         else { map.removeLayer(shipDensityLayer); }
+        document.body.classList.toggle('ship-active', on);
+        const shipLegend = document.getElementById('ship-density-legend');
+        if (shipLegend) shipLegend.hidden = !on;
     });
     document.getElementById('confidence-toggle').addEventListener('change', () => {
         toggleConfidence(document.getElementById('confidence-toggle').checked);

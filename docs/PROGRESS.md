@@ -1,5 +1,17 @@
 # Progress log
 
+## 2026-04-28 - ship density restyling and heatmap clean up
+
+Pulled the EMODnet vessel density layer away from its default green-yellow-red rainbow into a single-hue overlay so it stops competing with the teal-orange whale heatmap, tightened the heatmap to remove open-ocean ghost spots and added a matching legend block.
+
+- Moved the EMODnet WMS into a dedicated Leaflet pane at z-index 250 with a custom `.ship-density-pane` class. A grayscale + sepia + hue-rotate filter chain plus theme-aware blend modes (`screen` on dark, `multiply` on light) recolour the tiles in-browser; magenta-violet on dark, deep navy on light.
+- Tuned `L.heatLayer` from `radius:22, blur:18, minOpacity:0.30` to `radius:17, blur:12, minOpacity:0.05`. Isolated open-ocean observations now fall below the visibility threshold and Lofoten, Vestfjorden, Skagerrak read as crisp clusters instead of soft clouds.
+- Added a hidden ship density legend block under the cetacean gradient. The ship-toggle handler shows it when the overlay is on, hides it otherwise, and toggles a `body.ship-active` class that fades the ambient background grid so the shipping lanes read clearly.
+- Synced the on-screen cetacean legend gradient with the actual heatmap stops (added the warm amber tail).
+- Defined `--ship-low/mid/high` CSS custom properties per theme so the new gradient and any future ship-related UI stay theme-coherent.
+
+Tests: 64 unit + 11 e2e all green.
+
 ## 2026-04-27 - light theme and brand polish
 
 Added a light chart theme alongside the dark ocean theme. The theme switch updates the UI, browser theme color and CARTO basemap, and persists the user's choice locally.
