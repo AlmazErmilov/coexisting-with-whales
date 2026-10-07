@@ -1,3 +1,9 @@
+import { initOfflineSnapshot } from './offline.js';
+import { initDialogs, openDialog } from './dialogs.js';
+import { initCityLabels } from './city-labels.js';
+import { initOceanIntro, oceanDiagram } from './ocean-visual.js';
+import { initWhaleImages, whaleThumbnail } from './whale-images.js';
+import { initWhaleCards } from './whale-cards.js';
 // Entry point: map init, data loading, marker creation, events.
 
 import {
@@ -26,7 +32,6 @@ const THEMES = {
     dark: {
         label: 'Switch to light theme',
         next: 'light',
-        tileUrl: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
         themeColor: '#061017',
         coastline: 'rgba(255,255,255,0.18)',
         eez: 'rgba(124,231,215,0.30)',
@@ -35,7 +40,6 @@ const THEMES = {
     light: {
         label: 'Switch to dark theme',
         next: 'dark',
-        tileUrl: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
         themeColor: '#eef6f4',
         coastline: 'rgba(10,45,55,0.28)',
         eez: 'rgba(8,127,125,0.38)',
@@ -75,14 +79,15 @@ function applyTheme(themeName) {
     const themeKey = themeName === 'light' ? 'light' : 'dark';
     const theme = THEMES[themeKey];
     document.documentElement.dataset.theme = themeKey;
-    localStorage.setItem('whales-theme', themeKey);
+    try { localStorage.setItem('whales-theme', themeKey); } catch {}
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme.themeColor);
 
-    if (baseLayer) {
-        map.removeLayer(baseLayer);
+    if (!baseLayer) {
+        map.createPane('basemap').style.zIndex = 200;
+        baseLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, pane: 'basemap' }).addTo(map);
+        baseLayer.on('tileerror', () => { document.getElementById('map-status').textContent = 'Basemap unavailable · local coastline and records remain available'; });
+        baseLayer.on('tileload', () => { document.getElementById('map-status').textContent = ''; });
     }
-    baseLayer = L.tileLayer(theme.tileUrl, { maxZoom: 18 }).addTo(map);
-    baseLayer.bringToBack();
 
     if (coastlineLayer) coastlineLayer.setStyle(themedLayerStyle('coastline'));
     if (eezLayer) eezLayer.setStyle(themedLayerStyle('eez'));
@@ -106,8 +111,8 @@ const map = L.map('map', {
 });
 
 L.control.zoom({ position: 'topright' }).addTo(map);
-L.control.attribution({ position: 'bottomright', prefix: false }).addAttribution(
-    '© OpenStreetMap · CARTO · GBIF · EMODnet · Marine Regions · Natural Earth'
+map.attributionControl = L.control.attribution({ position: 'bottomright', prefix: false }).addAttribution(
+    '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a> · GBIF · EMODnet · Marine Regions · Natural Earth'
 ).addTo(map);
 
 // Dedicated pane for the EMODnet ship density layer so its CSS filter
@@ -120,10 +125,21 @@ shipPane.classList.add('ship-density-pane');
 shipPane.style.zIndex = 250;
 
 applyTheme(currentTheme());
+initDialogs();
+initWhaleImages();
+initOfflineSnapshot();
+initCityLabels(map);
+initOceanIntro();
+let refreshDetails = () => {};
+const portMarkers = [];
+document.getElementById('panel-toggle').addEventListener('click', e => {
+    const collapsed = document.body.classList.toggle('panel-collapsed');
+    e.currentTarget.setAttribute('aria-expanded', String(!collapsed));
+});
 
 // Load data.
 Promise.all([
-    fetch('data/whales_norway.json').then(r => r.json()),
+    fetch('data/whales_norway.json').then(r => { if (!r.ok) throw new Error('Data unavailable'); return r.json(); }),
     fetch('data/sea_regions.geojson').then(r => r.json()).catch(() => null),
     fetch('data/coastline.geojson').then(r => r.json()).catch(() => null),
     fetch('data/eez.geojson').then(r => r.json()).catch(() => null),
@@ -211,6 +227,8 @@ Promise.all([
         opacity: 0.65,
         pane: 'ships',
     });
+    shipDensityLayer.on('tileerror', () => { document.getElementById('ship-status').textContent = 'Shipping overlay unavailable'; });
+    shipDensityLayer.on('tileload', () => { document.getElementById('ship-status').textContent = ''; });
     // Off by default; user toggles with the checkbox.
 
     // Ports with strike-risk scoring.
@@ -236,27 +254,9 @@ Promise.all([
                 iconSize: [sz, sz],
                 iconAnchor: [sz / 2, sz / 2],
             });
-            const marker = L.marker([port.lat, port.lon], { icon });
+            const marker = L.marker([port.lat, port.lon], { icon, title: port.name, alt: port.name });
+            portMarkers.push({ port, marker });
 
-            const risk = riskLabel(normScore);
-            const topRisk = Object.entries(riskSpecies)
-                .sort((a, b) => b[1].count - a[1].count)
-                .slice(0, 4)
-                .map(([sp, d]) => {
-                    const cat = d.rl ? RED_LIST_CATEGORIES[d.rl] : null;
-                    const badge = cat ? `<span style="color:${cat.color};font-weight:700">${d.rl}</span> ` : '';
-                    const riskMark = d.risk === 'high' ? ' &#9650;' : d.risk === 'medium' ? ' &#9679;' : '';
-                    return `${badge}<i>${escapeHtml(sp)}</i>${riskMark} (${d.count})`;
-                }).join('<br>');
-
-            marker.bindPopup(
-                `<b>${escapeHtml(port.name)}</b><br>` +
-                `Type: ${escapeHtml(port.type)} | Throughput: ${port.throughput_mt} Mt/yr` +
-                `<br><span style="color:${risk.color};font-weight:700">${risk.text}</span>` +
-                ` <span style="color:#888">(${nearbyCount} obs within 30 km)</span>` +
-                (topRisk ? `<br><span style="font-size:11px">${topRisk}</span>` : '') +
-                `<br><span style="color:#888;font-size:10px">Click the port symbol to open the calculator</span>`
-            );
             marker.on('click', () => {
                 openPortModal(port);
             });
@@ -289,18 +289,20 @@ Promise.all([
         map, heatLayer, pointsLayer, allData,
         currentView: 'heatmap',
         regionLayer, confidenceMode: false,
+        onFiltersChange: () => refreshDetails(),
     });
 
+    initWhaleCards(() => allData, getFilteredData);
     applyFilters();
 
     // Event listeners.
     document.getElementById('species-filter').addEventListener('change', applyFilters);
     document.getElementById('month-slider').addEventListener('input', applyFilters);
-    document.getElementById('port-toggle').addEventListener('change', () => togglePorts(portLayer));
+    document.getElementById('port-toggle').addEventListener('change', () => { togglePorts(portLayer); refreshDetails(); });
     document.getElementById('ship-toggle').addEventListener('change', (e) => {
         const on = e.target.checked;
         if (on) { map.addLayer(shipDensityLayer); }
-        else { map.removeLayer(shipDensityLayer); }
+        else { map.removeLayer(shipDensityLayer); document.getElementById('ship-status').textContent = ''; }
         document.body.classList.toggle('ship-active', on);
         const shipLegend = document.getElementById('ship-density-legend');
         if (shipLegend) shipLegend.hidden = !on;
@@ -313,20 +315,6 @@ Promise.all([
         btn.addEventListener('click', () => setView(btn.dataset.view));
     });
 
-    document.querySelector('.info-btn').addEventListener('click', () => {
-        document.getElementById('info-modal').classList.add('open');
-    });
-
-    // Species list click delegation.
-    document.getElementById('species-list').addEventListener('click', (e) => {
-        const item = e.target.closest('.species-item');
-        if (!item) return;
-        const species = item.dataset.species;
-        if (!species) return;
-        const sel = document.getElementById('species-filter');
-        sel.value = species;
-        applyFilters();
-    });
 
     // Region modal: speed slider listener attached once.
     const regionSpeed = document.getElementById('region-speed');
@@ -348,6 +336,7 @@ Promise.all([
 
         const filtered = getFilteredData();
         const result = scoreRegion(currentRegionLayer, filtered, speedKn);
+        document.getElementById('region-diagram').innerHTML = oceanDiagram({speed: speedKn, species: Object.keys(result.riskSpecies)});
         const risk = riskLabel(result.normScore);
 
         document.getElementById('region-stats').textContent =
@@ -410,10 +399,10 @@ Promise.all([
                         : '';
                 const cn = COMMON_NAMES[sp];
                 const cnText = cn ? `<span style="color:#8b9bb1;font-size:10px"> · ${escapeHtml(cn.en)}</span>` : '';
-                return `<div class="risk-species-item">
+                return `<button type="button" class="risk-species-item" data-whale-details="${escapeHtml(sp)}">${whaleThumbnail(sp)}
                     <span class="species-info">${badge}<i>${escapeHtml(sp)}</i>${riskMark}${cnText}</span>
                     <span class="obs-count">${d.count} obs</span>
-                </div>`;
+                </button>`;
             }).join('');
         }
     }
@@ -430,7 +419,7 @@ Promise.all([
         document.getElementById('region-name').textContent = name;
         regionSpeed.value = DEFAULT_SHIP_SPEED_KN;
         recalculateRegion();
-        document.getElementById('region-modal').classList.add('open');
+        openDialog('region-modal');
     }
 
     // Port modal (similar but per port, not per region).
@@ -450,12 +439,13 @@ Promise.all([
         lethalEl.style.color = lethal > 0.7 ? '#ff6b6b'
             : lethal > 0.3 ? '#fbc02d' : '#4dd0e1';
 
-        const result = scorePort(currentPort, allData, speedKn);
+        const result = scorePort(currentPort, getFilteredData(), speedKn);
+        document.getElementById('port-diagram').innerHTML = oceanDiagram({speed: speedKn, species: Object.keys(result.riskSpecies)});
         const risk = riskLabel(result.normScore);
         document.getElementById('port-stats').textContent =
             `${result.nearbyCount.toLocaleString()} cetacean observations within 30 km.`;
         const riskEl = document.getElementById('port-risk');
-        riskEl.innerHTML = `<span style="color:${risk.color}">${risk.text}</span>`;
+        riskEl.innerHTML = result.nearbyCount ? `<span style="color:${risk.color}">${risk.text}</span>` : '<span>No observations · unknown</span>';
 
         const sorted = Object.entries(result.riskSpecies)
             .sort((a, b) => b[1].count - a[1].count)
@@ -471,10 +461,10 @@ Promise.all([
                     : d.risk === 'medium' ? ' <span style="color:#fbc02d">&#9679;</span>' : '';
                 const cn = COMMON_NAMES[sp];
                 const cnText = cn ? `<span style="color:#8b9bb1;font-size:10px"> · ${escapeHtml(cn.en)}</span>` : '';
-                return `<div class="risk-species-item">
+                return `<button type="button" class="risk-species-item" data-whale-details="${escapeHtml(sp)}">${whaleThumbnail(sp)}
                     <span class="species-info">${badge}<i>${escapeHtml(sp)}</i>${riskMark}${cnText}</span>
                     <span class="obs-count">${d.count} obs</span>
-                </div>`;
+                </button>`;
             }).join('');
         }
     }
@@ -491,30 +481,31 @@ Promise.all([
             `${port.type} · ${port.throughput_mt} Mt/yr · ${port.lat.toFixed(2)}, ${port.lon.toFixed(2)}`;
         portSpeed.value = DEFAULT_SHIP_SPEED_KN;
         recalculatePort();
-        document.getElementById('port-modal').classList.add('open');
+        openDialog('port-modal');
     }
+    refreshDetails = () => {
+        for (const {port, marker} of portMarkers) {
+            const result = scorePort(port, getFilteredData());
+            marker.getElement()?.querySelector('svg path')?.setAttribute('fill', result.nearbyCount ? scoreToColor(result.normScore) : '#82949b');
+        }
+        if (document.getElementById('region-modal').classList.contains('open')) recalculateRegion();
+        if (document.getElementById('port-modal').classList.contains('open')) recalculatePort();
+    };
+    refreshDetails();
+}).catch(() => {
+    const loading = document.getElementById('loading');
+    loading.style.display = '';
+    loading.innerHTML = '<p>Local whale records could not load.</p><button type="button" id="retry-data">Try again</button>';
+    document.getElementById('retry-data').onclick = () => location.reload();
 });
 
 // Global event listeners (need to work before data loads).
+document.querySelector('.info-btn').addEventListener('click', () => openDialog('info-modal'));
 document.getElementById('hide-ui-btn').addEventListener('click', toggleUI);
 document.getElementById('theme-btn').addEventListener('click', toggleTheme);
 
-['info-modal', 'region-modal', 'port-modal'].forEach(id => {
-    const el = document.getElementById(id);
-    el.addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open'); });
-});
-
-document.querySelectorAll('.modal-close').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.getElementById(btn.dataset.modal).classList.remove('open');
-    });
-});
-
 document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') {
-        document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
-        return;
-    }
+    if (document.querySelector('.modal-overlay.open, .ocean-intro--open')) return;
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === 'h' || e.key === 'H') toggleUI();
     if (e.key === 't' || e.key === 'T') toggleTheme();

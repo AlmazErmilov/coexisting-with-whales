@@ -4,7 +4,7 @@
 
 # Coexisting with Whales
 
-Interactive map of cetacean observations and vessel strike risk in Norwegian and surrounding waters. A pre stage screening tool for understanding where whales and ships overlap, and how cutting vessel speed changes strike lethality.
+Interactive atlas of sampled cetacean observations, ports and shipping in Norwegian and surrounding waters. Animated diagrams explain an illustrative large whale injury model conditioned on a collision. It does not estimate local encounter or collision probability.
 
 **Live demo**: https://coexisting-with-whales.no/
 
@@ -15,11 +15,11 @@ A sister project to [Coexisting with Birds](https://coexisting-with-birds.no/), 
 ## Quick start
 
 ```bash
-python3 -m http.server 8081
+npm run serve
 # open http://localhost:8081
 ```
 
-No build step. Static files served from any HTTP server. The site loads Leaflet, Leaflet.heat and CARTO basemaps from CDNs.
+No build step. Static files served from any HTTP server. Leaflet and Leaflet.heat are vendored locally. OpenStreetMap tiles and the optional EMODnet WMS need no API keys.
 
 ### Running tests
 
@@ -35,14 +35,14 @@ npm run test:e2e
 
 - **Heatmap view**: cetacean observation density across the Norwegian Sea, Barents Sea, North Sea and Greenland Sea using a perceptually uniform ocean palette.
 - **Points view**: individual observations colored by species; click a point for details (red list status, common names, source dataset).
-- **Species filter**: 25 cetacean species, with quick filters for great whales, threatened species, red-list species and high strike risk species.
-- **Month slider**: see seasonal variation including the summer feeding aggregations (June to September) and the winter herring fjord aggregations (November to January).
+- **Species filter**: 21 observed cetacean species (25 reference profiles), with quick filters for great whales, threatened species, red-list species and high strike risk species.
+- **Month slider**: filter the historical sample by month. Monthly acquisition quotas prevent interpreting these counts as seasonal abundance.
 - **Major ports**: 25 Norwegian ports rendered with risk-coloured markers (icon size scales with annual cargo throughput).
 - **Sea regions**: click a sea region to open a per region calculator with a vessel speed slider that updates strike lethality live.
 - **Per port collision calculator**: click any port for a Vanderlaan and Taggart 2007 lethality curve, the list of vulnerable species nearby and the moderated risk score.
 - **EMODnet vessel density overlay**: 1 km resolution shipping density grid from EMODnet Human Activities, togglable via a single checkbox (no API key, no auth).
 - **Sea region density layer**: each region coloured by observation count to show data confidence.
-- **Literature popups**: every formula and dataset has a hover popup with the citation and a DOI hyperlink (Vanderlaan and Taggart 2007, Conn and Silber 2013, Rockwood et al. 2017, Williams and O'Hara 2010, Redfern et al. 2013, Laist et al. 2001, Nisi et al. 2024 and more).
+- **Methods and sources**: the indexable about page retains citations and DOI hyperlinks (Vanderlaan and Taggart 2007, Conn and Silber 2013, Rockwood et al. 2017, Williams and O'Hara 2010, Redfern et al. 2013, Laist et al. 2001, Nisi et al. 2024 and more).
 - **Light and dark themes**: switch between ocean night mode and a daylight chart style; the map basemap changes with the interface theme.
 - **Hide UI**: toggle all overlays with a button or the [H] key for a clean map view.
 
@@ -124,7 +124,7 @@ index.html                Main HTML with metadata, side panel, modals, legend
 css/style.css             Styles with CSS custom properties (ocean palette)
 js/data.js                Constants: species, IUCN, Norwegian Red List 2021, seasonality
 js/refs.js                Literature references with DOI links and tooltip helpers
-js/scoring.js             Pure functions: peer reviewed collision risk physics
+js/scoring.js             Pure functions: injury curve and illustrative scoring
 js/ui.js                  DOM updates: filters, species list, toggles
 js/app.js                 Entry point: map init, data loading, events
 data/whales_norway.json   10K cetacean observations from GBIF
@@ -144,7 +144,7 @@ This is a screening tool, not an environmental impact assessment.
 
 - Cetacean records reflect observer effort, not true density. Coastal viewpoints (Andoya, Lofoten, Tromso) and tourist boat routes are overrepresented.
 - EMODnet's vessel density grid is a 2017 to 2024 annual average, not real time.
-- Norway specific peer reviewed strike risk modelling is sparse. We apply global lethality physics (Vanderlaan and Taggart 2007) to a global set of species accounts. For real planning use site specific surveys, Kystverket / BarentsWatch live AIS, and modelled species distributions from Havforskningsinstituttet.
+- Norway specific peer reviewed strike risk modelling is sparse. We apply a published large whale injury curve (Vanderlaan and Taggart 2007) to a global set of species accounts. For real planning use site specific surveys, Kystverket / BarentsWatch live AIS, and modelled species distributions from Havforskningsinstituttet.
 - The North Atlantic right whale (CR) is included for completeness but is functionally absent from the NE Atlantic.
 
 ## Deployment
@@ -158,3 +158,11 @@ MIT, see [LICENSE](LICENSE). All data is from open sources with attribution pres
 ## Author
 
 Built by [Almaz Ermilov](https://www.linkedin.com/in/almazermilov/) in Oslo, April 2026.
+
+## Marine diagrams and offline use
+
+The fullscreen Ocean intro replays at any time, with keyboard dismissal and reduced motion support. Port and sea region diagrams compare the chosen vessel speed with 10 knots. Species cards include 15 licensed local photos, 15 sourced facts, sample counts and monthly histograms. Missing photos use an explicitly labelled generic illustration. Credits are in [docs/whale-images.md](docs/whale-images.md).
+
+The GitHub Pages deployment needs no database or API credentials. A service worker saves an atomic versioned application snapshot after a successful first online visit. It includes local records, coastline, place names, scripts and fonts, with optional photos. It never caches third party tiles. Browser storage can be unavailable or evicted; the first visit still needs a connection. Snapshot date means the date saved to that browser, not the age of observations. The bundled 9,996 records were committed in April 2026 and have no verified retrieval timestamp.
+
+Run `npm run snapshot` after changing public assets. Commit the generated worker with the changes. CI checks its content hash. Existing visitors receive a refresh button when an update is ready. GitHub Pages publishes only the public website files.
