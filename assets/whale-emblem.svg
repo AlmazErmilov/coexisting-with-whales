@@ -1,20 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
   <title>Coexisting with Whales</title>
-  <desc>A rising humpback whale with curved flukes and a long pectoral fin.</desc>
+  <desc>A humpback whale rising through a marine chart, with curved flukes, a long pectoral fin and engraved throat pleats.</desc>
   <defs>
     <linearGradient id="sea" x1="12" y1="8" x2="147" y2="156" gradientUnits="userSpaceOnUse"><stop stop-color="#11333e"/><stop offset="1" stop-color="#06151d"/></linearGradient>
     <linearGradient id="body" x1="53" y1="49" x2="116" y2="113" gradientUnits="userSpaceOnUse"><stop stop-color="#d1f9ed"/><stop offset=".58" stop-color="#83d6c9"/><stop offset="1" stop-color="#3c999c"/></linearGradient>
     <linearGradient id="fin" x1="100" y1="87" x2="67" y2="129" gradientUnits="userSpaceOnUse"><stop stop-color="#d5faee"/><stop offset="1" stop-color="#77c9c1"/></linearGradient>
   </defs>
   <path fill="url(#sea)" d="M0 0H160V160H0Z"/>
-
+  <g class="chart" stroke="#80c5c2" stroke-width=".7">
+    <path opacity=".12" d="M40 15V145M80 15V145M120 15V145M15 40H145M15 80H145M15 120H145"/>
+    <path opacity=".4" d="M12 30V12H30M130 12H148V30M148 130V148H130M30 148H12V130"/>
+    <path opacity=".3" d="M77 12H83M80 9V15M77 148H83M80 145V151"/>
+    <path opacity=".26" stroke-dasharray="2 4" d="M24 119C58 142 117 127 139 101"/>
+  </g>
   <path class="surface" d="M21 48H37M78 48H109M136 48H144" stroke="#dcaf72" stroke-width="1.2"/>
   <path d="M40 76C26 69 18 54 17 37C31 40 43 50 48 63C44 46 49 32 60 24C64 44 61 60 53 73C70 62 85 56 99 55C104 50 107 45 113 43L116 55C132 55 143 61 147 70C153 81 147 91 134 98C119 106 99 108 82 103C67 100 56 89 45 83L40 76Z" fill="url(#body)" stroke="#c6f7e9" stroke-width="1.4" stroke-linejoin="round"/>
   <path d="M47 75C62 81 83 88 102 89C98 107 82 126 63 130C70 117 78 106 80 96" fill="url(#fin)" stroke="#c6f7e9" stroke-width="1.3" stroke-linejoin="round"/>
-
+  <g class="engraving" stroke="#17434a" stroke-linecap="round">
+    <path d="M111 83C124 86 137 81 143 75" stroke-width="1.8"/>
+    <path d="M111 89C125 92 137 85 145 80M109 95C122 97 136 90 143 85M106 100C119 103 132 96 138 91" stroke-width="1" opacity=".65"/>
+    <path d="M26 45C37 54 42 63 44 70M56 35C56 48 54 59 50 68M75 118C87 109 91 100 93 94" stroke-width="1" opacity=".55"/>
+    <path d="M59 77C73 68 89 63 101 63" stroke-width="1" opacity=".35"/>
+  </g>
   <circle cx="134" cy="70" r="1.7" fill="#102e38"/>
   <circle cx="134.4" cy="69.6" r=".5" fill="#f3d6a8"/>
-
+  <g class="detail" fill="#28616a"><circle cx="127" cy="59.2" r="1"/><circle cx="134" cy="61.6" r="1"/><circle cx="140" cy="65.3" r=".8"/></g>
   <g class="breath" stroke="#dfba83" stroke-width="1.25" stroke-linecap="round">
     <path d="M123 47C125 39 122 32 117 28M125 42C129 33 134 30 138 31"/>
     <path d="M113 24L112 21M139 26L142 25" opacity=".55"/>

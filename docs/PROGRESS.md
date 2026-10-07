@@ -1,5 +1,11 @@
 # Progress log
 
+## 2026-10-07: whale emblem
+
+Replaced the original whale mark with a vector emblem based on curved flukes, a long pectoral fin and engraved throat pleats. A restrained marine chart frame connects it to the site diagrams. The header and fullscreen introduction share the detailed asset. The favicon uses a simplified silhouette, with matching PNG and Apple touch exports. The local snapshot includes the new emblem.
+
+Checked the mark in both themes and small icon sizes. Existing interaction and offline regression checks remain applicable.
+
 ## 2026-10-07: marine diagrams and offline atlas
 
 Added a fullscreen replayable marine introduction, animated visual help and responsive vessel speed diagrams. Species cards provide local licensed photos, sourced facts and sample summaries. City labels stay above the heatmap. Controls use nearly square corners and compact mobile layouts.

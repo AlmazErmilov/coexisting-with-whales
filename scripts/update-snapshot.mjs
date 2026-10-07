@@ -3,7 +3,7 @@ import {createHash} from 'node:crypto';
 import {resolve,join} from 'node:path';
 const root=resolve(import.meta.dirname,'..');
 const walk=directory=>readdirSync(join(root,directory),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(join(directory,e.name)):[join(directory,e.name)]).sort();
-const core=['./','index.html','about.html','docs/whale-images.html','assets/whales/illustration-placeholder.svg','assets/favicon.svg', ...walk('js'),...walk('css'),...walk('data'),...walk('fonts'),...walk('assets/vendor').filter(p=>/\.(js|css|png)$/.test(p))].filter(p=>p==='./'||existsSync(join(root,p)));
+const core=['./','index.html','about.html','docs/whale-images.html','assets/whales/illustration-placeholder.svg','assets/favicon.svg','assets/whale-emblem.svg', ...walk('js'),...walk('css'),...walk('data'),...walk('fonts'),...walk('assets/vendor').filter(p=>/\.(js|css|png)$/.test(p))].filter(p=>p==='./'||existsSync(join(root,p)));
 const photos=existsSync(join(root,'assets/whales'))?walk('assets/whales').filter(p=>/\.(jpg|jpeg|png|svg|webp)$/i.test(p)):[];
 let worker=readFileSync(join(root,'service-worker.js'),'utf8');
 const hash=createHash('sha256');

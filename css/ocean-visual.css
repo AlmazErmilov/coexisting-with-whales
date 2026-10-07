@@ -165,3 +165,6 @@ body:has(.modal-overlay.open) .ocean-intro .ocean-intro__replay { bottom: max(4p
 @media (prefers-reduced-motion: reduce) {
     .ocean-intro *, .ocean-diagram * { animation: none !important; transition: none !important; }
 }
+
+.ocean-intro__brand {display:flex;align-items:center;gap:12px;}
+.ocean-intro__brand img {display:block;flex-shrink:0;}
