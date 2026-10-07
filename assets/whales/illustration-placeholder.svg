@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-labelledby="title desc">
+  <title id="title">Generic cetacean illustration</title>
+  <desc id="desc">A stylised whale shape. This is a generic placeholder, not a photograph or a species identification drawing.</desc>
+  <metadata>Original project illustration, 2026. Dedicated to the public domain under CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/</metadata>
+  <rect width="120" height="120" rx="12" fill="#e7eef2"/>
+  <path d="M19 56c1-16 18-26 39-24 12 1 22 6 29 16l10-4 9-14c2 15-1 22-10 28 5 10 4 19-2 27l-6-18-10-4c-9 9-20 13-32 12-17-1-28-8-27-19Z" fill="#577585"/>
+  <path d="m47 67 7 16 13-14" fill="#3d5c6d"/>
+  <circle cx="32" cy="49" r="2" fill="#e7eef2"/>
+  <text x="60" y="104" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#254553">Generic</text>
+</svg>

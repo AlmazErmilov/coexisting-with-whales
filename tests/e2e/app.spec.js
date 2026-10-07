@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('button', {name:'Dismiss introduction'}).click();
     await expect(page.locator('#loading')).toBeHidden({ timeout: 30000 });
 });
 
@@ -45,20 +46,15 @@ test('view toggle switches between heatmap and points', async ({ page }) => {
 test('info modal opens and closes', async ({ page }) => {
     await page.click('.info-btn');
     await expect(page.locator('#info-modal')).toHaveClass(/open/);
-    await expect(page.locator('#info-modal h2')).toContainText('Coexisting with Whales');
+    await expect(page.locator('#info-modal h2')).toContainText('How it works');
     await page.locator('#info-modal .modal-close').click();
     await expect(page.locator('#info-modal')).not.toHaveClass(/open/);
 });
 
-test('info modal contains literature references', async ({ page }) => {
-    await page.click('.info-btn');
-    await expect(page.locator('#info-modal')).toHaveClass(/open/);
-    // Wait for refs.js to inject reference tags
-    await page.waitForTimeout(500);
-    const vtRef = page.locator('#ref-vt-formula .ref-tag');
-    await expect(vtRef).toBeVisible();
-    const href = await vtRef.getAttribute('href');
-    expect(href).toContain('doi.org');
+test('methods retain model references on an indexable page', async ({page}) => {
+    await page.goto('/about.html');
+    await expect(page.locator('h1')).toContainText('About');
+    await expect(page.locator('a[href*="doi.org"]').first()).toBeVisible();
 });
 
 test('Hide UI button toggles panels', async ({ page }) => {

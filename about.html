@@ -1,0 +1,288 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Whale map methods and sources | Coexisting with Whales</title><meta name="description" content="Sources and limitations of the Norwegian whale observation map, vessel speed studies and local snapshots."><link rel="canonical" href="https://coexisting-with-whales.no/about.html"><link rel="stylesheet" href="css/style.css"></head><body class="document-page"><main class="about-page"><nav><a href="./">← Explore the map</a> · <a href="docs/whale-images.html">Photo credits</a></nav><h1>About the whale map</h1>
+            <p class="concept-text">
+                Vessel strikes are one of the leading anthropogenic causes of large whale mortality. The Norwegian
+                Sea, Barents Sea and surrounding waters host fin, blue, sperm, humpback and minke whales alongside
+                some of Europe's busiest shipping lanes. This tool overlays cetacean observation density with
+                gridded vessel density. Port and region scores use weighted observations and a speed factor; the shipping overlay is visual context and is not used numerically in those scores.
+            </p>
+
+            <div class="motivation-card">
+                <div class="card-title">Why this exists</div>
+                <p style="margin-bottom:6px;">
+                    The Mesh Oslo "What else can you build" prompt highlighted whale incident tracking as an open
+                    problem. Hubocean.earth and the One Ocean Expedition show how rich open ocean data has
+                    become; this app uses a small, public slice of that for a single, pragmatic question: where do
+                    whales and ships overlap, and how does cutting vessel speed change strike lethality.
+                </p>
+                <p style="margin-bottom:0;">
+                    A sister project, <a href="https://coexisting-with-birds.no/" target="_blank" rel="noopener">Coexisting with Birds</a>,
+                    answers the same question for wind farms and birdlife.
+                </p>
+            </div>
+
+            <h3>Conservation status</h3>
+            <p>The map shows two parallel categorisations. The Norwegian Red List 2021 (Artsdatabanken) covers
+                national populations; the global IUCN Red List covers the species worldwide. We display the
+                stricter of the two, and call out the divergence where it matters (e.g. the fin whale is VU
+                globally and LC nationally because the Norwegian feeding population is recovering).</p>
+            <table class="legend-table">
+                <tr><td><span class="rl-badge" style="background:var(--rl-cr);font-size:11px;padding:2px 6px">CR</span></td>
+                    <td><b style="color:#e6edf5">Critically endangered</b><br>Extremely high risk of extinction.</td></tr>
+                <tr><td><span class="rl-badge" style="background:var(--rl-en);font-size:11px;padding:2px 6px">EN</span></td>
+                    <td><b style="color:#e6edf5">Endangered</b><br>Very high risk of extinction.</td></tr>
+                <tr><td><span class="rl-badge" style="background:var(--rl-vu);font-size:11px;padding:2px 6px">VU</span></td>
+                    <td><b style="color:#e6edf5">Vulnerable</b><br>High risk of extinction.</td></tr>
+                <tr><td><span class="rl-badge" style="background:var(--rl-nt);color:#333;font-size:11px;padding:2px 6px">NT</span></td>
+                    <td><b style="color:#e6edf5">Near threatened</b><br>Close to qualifying for a threatened category.</td></tr>
+            </table>
+
+            <h3>Strike vulnerability per species</h3>
+            <p>Risk scales with body size, surface time and overlap with shipping routes. We use the species accounts
+                in <span class="info-tooltip">
+        <a class="ref-tag" href="https://doi.org/10.1111/j.1748-7692.2001.tb00980.x" target="_blank" rel="noopener">Laist D.W. 2001</a>
+        <span class="tooltip-content">Laist D.W., Knowlton A.R., Mead J.G., Collet A.S., Podesta M. (2001). Collisions between ships and whales. <i>Marine Mammal Science</i>, 17(1), 35-75.<br><br>Foundational ship-strike record table. Most lethal injuries occur at vessel speeds ≥ 14 knots.<br><br>doi: 10.1111/j.1748-7692.2001.tb00980.x<br><br><a href="https://doi.org/10.1111/j.1748-7692.2001.tb00980.x" target="_blank" rel="noopener">Open source</a></span>
+    </span>, <span class="info-tooltip">
+        <a class="ref-tag" href="https://doi.org/10.1371/journal.pone.0183052" target="_blank" rel="noopener">Rockwood R.C. 2017</a>
+        <span class="tooltip-content">Rockwood R.C., Calambokidis J., Jahncke J. (2017). High mortality of blue, humpback and fin whales from modeling of vessel collisions on the U.S. West Coast suggests population impacts and insufficient protection. <i>PLOS ONE</i>, 12(8), e0183052.<br><br>Encounter-theory mortality model. Per-cell expected strikes integrate whale density, ship density, vessel speed and lethality.<br><br>doi: 10.1371/journal.pone.0183052<br><br><a href="https://doi.org/10.1371/journal.pone.0183052" target="_blank" rel="noopener">Open source</a></span>
+    </span> and <span class="info-tooltip">
+        <a class="ref-tag" href="https://doi.org/10.1126/science.adp1950" target="_blank" rel="noopener">Nisi A.C. et al. 2024</a>
+        <span class="tooltip-content">Nisi A.C. et al. (2024). Ship collision risk threatens whales across the world’s oceans. <i>Science</i>, 385, 1136-1141.<br><br>Global blue, fin, humpback and sperm whale habitat-vs-traffic overlap. Mandatory speed restrictions cover only 0.54 percent of blue whale collision-risk hotspots.<br><br>doi: 10.1126/science.adp1950<br><br><a href="https://doi.org/10.1126/science.adp1950" target="_blank" rel="noopener">Open source</a></span>
+    </span> to
+                classify each cetacean as high, medium or low vulnerability.</p>
+            <table class="legend-table">
+                <tr><td style="color:#ff6b6b;font-size:16px">&#9650;</td>
+                    <td><b style="color:#e6edf5">High vulnerability</b><br>
+                    Large slow surface dwellers. Includes blue, fin, sei, humpback, sperm whale and the North
+                    Atlantic right whale (functionally absent from NE Atlantic but listed for completeness).</td></tr>
+                <tr><td style="color:#fbc02d;font-size:16px">&#9679;</td>
+                    <td><b style="color:#e6edf5">Moderate vulnerability</b><br>
+                    Common minke whale, killer whale, long-finned and short-finned pilot whales.</td></tr>
+                <tr><td style="color:#888;font-size:11px">no icon</td>
+                    <td><b style="color:#e6edf5">Lower vulnerability</b><br>
+                    Agile small cetaceans (porpoises, dolphins) and deep divers (beaked whales). Bycatch and
+                    acoustic disturbance dominate over direct strikes for these species.</td></tr>
+            </table>
+
+            <h3>Heatmap and points</h3>
+            <p>The heatmap uses a 10K stratified sample from GBIF (taxonKey 733) covering the bounding box
+                lat 56-82, lon -10 to 70 across all twelve months. Counts reflect <em>where people record whales</em>,
+                not absolute abundance. Coastal and tourist viewpoints (Andoya, Lofoten, Tromso) are
+                overrepresented. Points view shows individual records colored by species; click a point for
+                details.</p>
+            <table class="legend-table">
+                <tr>
+                    <td style="width:120px"><span class="ship-swatch" style="background:linear-gradient(to right,#001a33,#0078a8,#90e0ef,#caf0f8)"></span></td>
+                    <td>Low to high cetacean observation density</td>
+                </tr>
+                <tr>
+                    <td><svg viewBox="0 0 24 24" width="20" height="20" style="vertical-align:middle"><circle cx="12" cy="12" r="10" fill="#fbc02d" opacity="0.85" stroke="rgba(255,255,255,0.6)" stroke-width="1"/><path d="M12 5 L13.5 9.5 L18 9.5 L14.2 12.2 L15.7 16.5 L12 14 L8.3 16.5 L9.8 12.2 L6 9.5 L10.5 9.5 Z" fill="rgba(255,255,255,0.85)"/></svg></td>
+                    <td>Major Norwegian port (icon size scales with annual cargo throughput)</td>
+                </tr>
+            </table>
+
+            <h3>Per port strike risk</h3>
+            <p style="font-size:11px;color:#99a8bf">Each major port is colored from
+                <span style="color:rgb(0,180,80);font-weight:700">green</span> (low) through
+                <span style="color:rgb(200,150,80);font-weight:700">yellow</span> to
+                <span style="color:rgb(255,0,80);font-weight:700">red</span> (very high) based on a composite
+                weighted score of nearby observations.</p>
+
+            <div class="calc-step">
+                <div class="step-title">Step 1. Find nearby observations</div>
+                <div class="step-body">
+                    For each port, all cetacean observations within a <b>30 km radius</b> are collected.
+                    Distance is computed using a flat earth approximation (sufficient at sub-100 km scales).
+                </div>
+                <div class="formula-block">dx = (obs.lon - port.lon) × 111 × cos(port.lat)
+dy = (obs.lat - port.lat) × 111
+distance = sqrt(dx² + dy²)     // in km</div>
+            </div>
+
+            <div class="calc-step">
+                <div class="step-title">Step 2. Weight each observation</div>
+                <div class="step-body">
+                    Each observation starts with weight 1. Three multipliers are applied: red list weight,
+                    strike vulnerability and a relative speed factor.
+                </div>
+                <table class="legend-table" style="font-size:11px">
+                    <tr><td colspan="2" style="color:#99a8bf;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1)">Red list weight</td></tr>
+                    <tr><td><span class="rl-badge" style="background:var(--rl-cr);font-size:10px;padding:1px 5px">CR</span></td><td>× 8</td></tr>
+                    <tr><td><span class="rl-badge" style="background:var(--rl-en);font-size:10px;padding:1px 5px">EN</span></td><td>× 5</td></tr>
+                    <tr><td><span class="rl-badge" style="background:var(--rl-vu);font-size:10px;padding:1px 5px">VU</span></td><td>× 3</td></tr>
+                    <tr><td><span class="rl-badge" style="background:var(--rl-nt);color:#333;font-size:10px;padding:1px 5px">NT</span></td><td>× 1.5</td></tr>
+                    <tr><td style="color:#888">Least concern (LC) / Data deficient (DD)</td><td>× 1</td></tr>
+                    <tr><td colspan="2" style="color:#99a8bf;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.1);padding-top:6px">Strike vulnerability</td></tr>
+                    <tr><td style="color:#ff6b6b">High</td><td>× 3</td></tr>
+                    <tr><td style="color:#fbc02d">Medium</td><td>× 1.5</td></tr>
+                    <tr><td style="color:#888">Low</td><td>× 1</td></tr>
+                </table>
+                <div class="step-body" style="margin-top:6px">
+                    A speed factor scales the score by P_lethal(v) / P_lethal(default), where P_lethal is the
+                    Vanderlaan and Taggart 2007 logistic curve (<span class="info-tooltip">
+        <a class="ref-tag" href="https://doi.org/10.1111/j.1748-7692.2006.00098.x" target="_blank" rel="noopener">Vanderlaan A.S.M. 2007</a>
+        <span class="tooltip-content">Vanderlaan A.S.M., Taggart C.T. (2007). Vessel collisions with whales: the probability of lethal injury based on vessel speed. <i>Marine Mammal Science</i>, 23(1), 144-156.<br><br>Logistic curve for P(lethal) vs vessel speed in knots. β0 = -4.89, β1 = 0.41. P=0.5 at v=11.8 kn.<br><br>doi: 10.1111/j.1748-7692.2006.00098.x<br><br><a href="https://doi.org/10.1111/j.1748-7692.2006.00098.x" target="_blank" rel="noopener">Open source</a></span>
+    </span>). The default
+                    speed is 14 knots.
+                </div>
+            </div>
+
+            <div class="calc-step">
+                <div class="step-title">Step 3. Normalise and color</div>
+                <div class="step-body">
+                    The raw score is divided by 300 (author chosen display threshold, not a calibrated risk probability) and clamped to [0, 1].
+                    Color interpolates green to red.
+                </div>
+                <div class="formula-block">normalized = min(1, score / 300)
+
+Color mapping:
+  0.0 - 0.2  →  green     (low strike risk)
+  0.2 - 0.5  →  yellow    (moderate)
+  0.5 - 0.75 →  orange    (high)
+  0.75 - 1.0 →  red       (very high)</div>
+            </div>
+
+            <h3>Vessel speed and lethality</h3>
+            <p>The probability that a struck large whale dies or is severely injured rises sharply with vessel
+                speed. The app uses the Vanderlaan and Taggart 2007 logistic
+                <span class="info-tooltip">
+        <a class="ref-tag" href="https://doi.org/10.1111/j.1748-7692.2006.00098.x" target="_blank" rel="noopener">Vanderlaan A.S.M. 2007</a>
+        <span class="tooltip-content">Vanderlaan A.S.M., Taggart C.T. (2007). Vessel collisions with whales: the probability of lethal injury based on vessel speed. <i>Marine Mammal Science</i>, 23(1), 144-156.<br><br>Logistic curve for P(lethal) vs vessel speed in knots. β0 = -4.89, β1 = 0.41. P=0.5 at v=11.8 kn.<br><br>doi: 10.1111/j.1748-7692.2006.00098.x<br><br><a href="https://doi.org/10.1111/j.1748-7692.2006.00098.x" target="_blank" rel="noopener">Open source</a></span>
+    </span>:</p>
+            <div class="formula-block">P_lethal(v) = 1 / (1 + exp(-(β₀ + β₁ · v)))
+β₀ = -4.89,  β₁ = 0.41        v in knots
+
+P=0.21 at v= 8.6 kn   (NOAA slow zone target)
+P≈0.49 at v=11.8 kn
+P=0.79 at v=15.0 kn   (typical merchant cruising)
+P→1.0  above ~18 kn</div>
+            <p style="font-size:11px;color:#99a8bf">
+                The 10 knot line is an illustrative comparison. With the coefficients used here, the conditional estimate is about 31% at 10 knots. This curve describes injury given a collision for large whales, not the probability of encountering or striking a whale.
+            </p>
+
+            <h3>Encounter rate (advanced)</h3>
+            <p>For per cell mortality, Rockwood et al. 2017 (<span class="info-tooltip">
+        <a class="ref-tag" href="https://doi.org/10.1371/journal.pone.0183052" target="_blank" rel="noopener">Rockwood R.C. 2017</a>
+        <span class="tooltip-content">Rockwood R.C., Calambokidis J., Jahncke J. (2017). High mortality of blue, humpback and fin whales from modeling of vessel collisions on the U.S. West Coast suggests population impacts and insufficient protection. <i>PLOS ONE</i>, 12(8), e0183052.<br><br>Encounter-theory mortality model. Per-cell expected strikes integrate whale density, ship density, vessel speed and lethality.<br><br>doi: 10.1371/journal.pone.0183052<br><br><a href="https://doi.org/10.1371/journal.pone.0183052" target="_blank" rel="noopener">Open source</a></span>
+    </span>) factor the rate of
+                encounters out of the strike physics:</p>
+            <div class="formula-block">λ_e = 2 r_c (v_b + v_w) · I(v_b, v_w) / S
+r_c = (L_whale + W_ship) / 2
+M    = encounters · P_strike_depth · (1 - P_avoidance) · P_lethal(v_b)</div>
+            <p style="font-size:11px;color:#99a8bf">
+                I(v_b, v_w) is the Gerritsen-Strickler velocity correction term; for v_b ≫ v_w it approaches 1.
+                P_strike_depth is the fraction of time the whale is in the hull-swept depth band (typically
+                0.4 to 0.6 from tag data). P_avoidance is the chance of last second evasion (0 by default,
+                conservative).
+            </p>
+            <p style="font-size:11px;color:#99a8bf">
+                Williams and O'Hara 2010 (<span class="info-tooltip">
+        <a class="ref-tag" href="https://journal.iwc.int/index.php/jcrm/article/view/624" target="_blank" rel="noopener">Williams R. 2010</a>
+        <span class="tooltip-content">Williams R., O’Hara P. (2010). Modelling ship strike risk to fin whales, humpback whales and killer whales in British Columbia, Canada. <i>Journal of Cetacean Research and Management</i>, 11(1), 1-8.<br><br>Spatial co-occurrence risk: R(i,j) = whale_density × ship_density. Map of relative risk hotspots.<br><br><a href="https://journal.iwc.int/index.php/jcrm/article/view/624" target="_blank" rel="noopener">Open source</a></span>
+    </span>) take the simpler co-occurrence
+                approach: relative risk per cell is whale_density × ship_density. Redfern et al. 2013
+                (<span class="info-tooltip">
+        <a class="ref-tag" href="https://doi.org/10.1111/cobi.12029" target="_blank" rel="noopener">Redfern J.V. et al. 2013</a>
+        <span class="tooltip-content">Redfern J.V. et al. (2013). Assessing the risk of ships striking large whales in marine spatial planning. <i>Conservation Biology</i>, 27(2), 292-302.<br><br>Marine spatial planning use case. Integrates whale density along vessel routes.<br><br>doi: 10.1111/cobi.12029<br><br><a href="https://doi.org/10.1111/cobi.12029" target="_blank" rel="noopener">Open source</a></span>
+    </span>) integrate this along candidate shipping routes, the canonical
+                marine spatial planning citation.
+            </p>
+
+            <h3>Region density layer</h3>
+            <p style="font-size:11px;color:#99a8bf">When toggled on, each sea region is colored by observation
+                count. Empty regions appear in grey, indicating low data confidence rather than absence of
+                whales. With a 10K sample over four large IHO sea areas, expect at most a few thousand records
+                per region.</p>
+
+            <h3>Data sources</h3>
+            <div class="source-card">
+        <div class="src-name"><a href="https://doi.org/10.1111/j.1748-7692.2006.00098.x" target="_blank" rel="noopener">Vessel collisions with whales: the probability of lethal injury based on vessel speed</a></div>
+        <div class="src-detail">Vanderlaan A.S.M., Taggart C.T. (2007). <b>Vessel collisions with whales: the probability of lethal injury based on vessel speed</b>. <i>Marine Mammal Science</i>, 23(1), 144-156. doi: 10.1111/j.1748-7692.2006.00098.x<br>Logistic curve for P(lethal) vs vessel speed in knots. β0 = -4.89, β1 = 0.41. P=0.5 at v=11.8 kn.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://doi.org/10.1890/ES13-00004.1" target="_blank" rel="noopener">Vessel speed restrictions reduce risk of collision-related mortality for North Atlantic right whales</a></div>
+        <div class="src-detail">Conn P.B., Silber G.K. (2013). <b>Vessel speed restrictions reduce risk of collision-related mortality for North Atlantic right whales</b>. <i>Ecosphere</i>, 4(4), art. 43. doi: 10.1890/ES13-00004.1<br>Bayesian re-fit of the lethality-vs-speed curve. P(mortality) ≈ 0.21 at 10 kn, 0.50 at 15 kn.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://doi.org/10.1111/j.1748-7692.2001.tb00980.x" target="_blank" rel="noopener">Collisions between ships and whales</a></div>
+        <div class="src-detail">Laist D.W., Knowlton A.R., Mead J.G., Collet A.S., Podesta M. (2001). <b>Collisions between ships and whales</b>. <i>Marine Mammal Science</i>, 17(1), 35-75. doi: 10.1111/j.1748-7692.2001.tb00980.x<br>Foundational ship-strike record table. Most lethal injuries occur at vessel speeds ≥ 14 knots.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://doi.org/10.1371/journal.pone.0183052" target="_blank" rel="noopener">High mortality of blue, humpback and fin whales from modeling of vessel collisions on the U.S. West Coast suggests population impacts and insufficient protection</a></div>
+        <div class="src-detail">Rockwood R.C., Calambokidis J., Jahncke J. (2017). <b>High mortality of blue, humpback and fin whales from modeling of vessel collisions on the U.S. West Coast suggests population impacts and insufficient protection</b>. <i>PLOS ONE</i>, 12(8), e0183052. doi: 10.1371/journal.pone.0183052<br>Encounter-theory mortality model. Per-cell expected strikes integrate whale density, ship density, vessel speed and lethality.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://journal.iwc.int/index.php/jcrm/article/view/624" target="_blank" rel="noopener">Modelling ship strike risk to fin whales, humpback whales and killer whales in British Columbia, Canada</a></div>
+        <div class="src-detail">Williams R., O’Hara P. (2010). <b>Modelling ship strike risk to fin whales, humpback whales and killer whales in British Columbia, Canada</b>. <i>Journal of Cetacean Research and Management</i>, 11(1), 1-8.<br>Spatial co-occurrence risk: R(i,j) = whale_density × ship_density. Map of relative risk hotspots.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://doi.org/10.1111/cobi.12029" target="_blank" rel="noopener">Assessing the risk of ships striking large whales in marine spatial planning</a></div>
+        <div class="src-detail">Redfern J.V. et al. (2013). <b>Assessing the risk of ships striking large whales in marine spatial planning</b>. <i>Conservation Biology</i>, 27(2), 292-302. doi: 10.1111/cobi.12029<br>Marine spatial planning use case. Integrates whale density along vessel routes.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://doi.org/10.1126/science.adp1950" target="_blank" rel="noopener">Ship collision risk threatens whales across the world’s oceans</a></div>
+        <div class="src-detail">Nisi A.C. et al. (2024). <b>Ship collision risk threatens whales across the world’s oceans</b>. <i>Science</i>, 385, 1136-1141. doi: 10.1126/science.adp1950<br>Global blue, fin, humpback and sperm whale habitat-vs-traffic overlap. Mandatory speed restrictions cover only 0.54 percent of blue whale collision-risk hotspots.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://www.fisheries.noaa.gov/s3/2021-01/FINAL_NARW_Vessel_Speed_Rule_Report_Jun_2020.pdf" target="_blank" rel="noopener">North Atlantic Right Whale Vessel Speed Rule Assessment</a></div>
+        <div class="src-detail">NOAA Fisheries (2020). <b>North Atlantic Right Whale Vessel Speed Rule Assessment</b>. <i>Office of Protected Resources</i>, Final Report.<br>10-knot mandatory speed limit in Seasonal Management Areas; 80-90 percent reduction in mortality risk.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://wwwcdn.imo.org/localresources/en/MediaCentre/HotTopics/Documents/MEPC.1-CIRC.674.pdf" target="_blank" rel="noopener">Guidance Document for Minimizing the Risk of Ship Strikes with Cetaceans</a></div>
+        <div class="src-detail">International Maritime Organization (2009). <b>Guidance Document for Minimizing the Risk of Ship Strikes with Cetaceans</b>. <i>IMO</i>, MEPC.1/Circ.674.<br>Voluntary guidance: traffic separation schemes, areas to be avoided, seasonal speed reduction, crew training.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://iwc.int/management-and-conservation/vessel-strikes" target="_blank" rel="noopener">Vessel strikes</a></div>
+        <div class="src-detail">International Whaling Commission (2026). <b>Vessel strikes</b>. <i>IWC Conservation Programme</i>.<br>Global ship strike database including reports from Norwegian waters.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://www.gbif.org/occurrence/search?taxon_key=733" target="_blank" rel="noopener">GBIF Occurrence Search for order Cetacea, Norwegian and surrounding waters</a></div>
+        <div class="src-detail">GBIF.org (2026). <b>GBIF Occurrence Search for order Cetacea, Norwegian and surrounding waters</b>. <i>Global Biodiversity Information Facility</i>.<br>CC BY 4.0 / CC0 / CC BY-NC 4.0 (per contributing dataset). 137,820 records in our bounding box; 10K stratified sample shown here.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://artsdatabanken.no/lister/rodlisteforarter/2021" target="_blank" rel="noopener">Norwegian Red List for Species 2021 - Mammals</a></div>
+        <div class="src-detail">Artsdatabanken (2021). <b>Norwegian Red List for Species 2021 - Mammals</b>. <i>Norwegian Biodiversity Information Centre</i>.<br>National red list. 27 of 71 mammal species are red-listed; cetacean entries concentrated on Arctic and great whales.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://iucn-csg.org/red-list-status-of-cetaceans/" target="_blank" rel="noopener">Red List Status of Cetaceans</a></div>
+        <div class="src-detail">IUCN SSC Cetacean Specialist Group (2024). <b>Red List Status of Cetaceans</b>. <i>IUCN</i>.<br>Global IUCN Red List assessments for cetaceans, updated periodically.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://www.ospar.org/work-areas/bdc/species-habitats/list-of-threatened-declining-species-habitats" target="_blank" rel="noopener">List of Threatened and/or Declining Species and Habitats</a></div>
+        <div class="src-detail">OSPAR Commission (2023). <b>List of Threatened and/or Declining Species and Habitats</b>. <i>OSPAR Quality Status Report 2023</i>.<br>Four cetaceans listed: bowhead, North Atlantic right whale, blue whale, harbour porpoise.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://www.ascobans.org/" target="_blank" rel="noopener">Agreement on the Conservation of Small Cetaceans of the Baltic, North-East Atlantic, Irish and North Seas</a></div>
+        <div class="src-detail">ASCOBANS (2026). <b>Agreement on the Conservation of Small Cetaceans of the Baltic, North-East Atlantic, Irish and North Seas</b>. <i>UNEP</i>.<br>Conservation agreement covering all small cetaceans except sperm whale.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://nammco.no/" target="_blank" rel="noopener">Species accounts and management advice</a></div>
+        <div class="src-detail">NAMMCO (2026). <b>Species accounts and management advice</b>. <i>North Atlantic Marine Mammal Commission</i>.<br>Member states: Norway, Iceland, Greenland, Faroes. Provides species accounts and management advice.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://emodnet.ec.europa.eu/en/human-activities" target="_blank" rel="noopener">Vessel Density Maps</a></div>
+        <div class="src-detail">EMODnet Human Activities (2024). <b>Vessel Density Maps</b>. <i>European Marine Observation and Data Network</i>.<br>1×1 km grid shipping density (hours/km^2/month), 2017-2024. AIS data via CLS, ORBCOMM and vesseltracker.com.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://www.marineregions.org/" target="_blank" rel="noopener">Maritime Boundaries Geodatabase, version 12</a></div>
+        <div class="src-detail">Flanders Marine Institute (VLIZ) (2023). <b>Maritime Boundaries Geodatabase, version 12</b>. <i>Marine Regions</i>. doi: 10.14284/632<br>Norwegian EEZ outlines (mainland MRGID 5686, Jan Mayen 8437, Svalbard 33181). CC BY 4.0.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">50m physical vectors - coastline</a></div>
+        <div class="src-detail">Natural Earth (2026). <b>50m physical vectors - coastline</b>. <i>Public domain</i>.<br>Public domain coastline data, clipped to Norwegian waters bbox.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://doi.org/10.1007/s00300-021-02869-6" target="_blank" rel="noopener">Mass strandings of seven toothed and baleen whale species in Northern Norway, March 2020</a></div>
+        <div class="src-detail">Nilssen K.T. et al. (2021). <b>Mass strandings of seven toothed and baleen whale species in Northern Norway, March 2020</b>. <i>Polar Biology</i>, 44, 761-769. doi: 10.1007/s00300-021-02869-6<br>Discusses anthropogenic stressors including shipping in Norwegian waters.</div>
+    </div><div class="source-card">
+        <div class="src-name"><a href="https://www.hi.no/en/hi/temasider/species" target="_blank" rel="noopener">Cetacean abundance estimates from NILS surveys</a></div>
+        <div class="src-detail">Havforskningsinstituttet (Institute of Marine Research) (2026). <b>Cetacean abundance estimates from NILS surveys</b>. <i>IMR</i>.<br>Annual abundance estimates from line-transect surveys.</div>
+    </div>
+
+            <h3>Limitations</h3>
+            <p>This is a screening tool, not an environmental impact assessment. Cetacean records reflect
+                observer effort, not true density. EMODnet's vessel density grid is a 2017 to 2024 average.
+                Norwegian-waters specific strike-risk modelling is sparse in the literature; we apply global
+                physics and global species accounts. For real planning, use site specific surveys, Kystverket /
+                BarentsWatch live AIS and modelled species distributions from
+                Havforskningsinstituttet (<span class="info-tooltip">
+        <a class="ref-tag" href="https://www.hi.no/en/hi/temasider/species" target="_blank" rel="noopener">Havforskningsinstituttet (Institute of Marine Research) 2026</a>
+        <span class="tooltip-content">Havforskningsinstituttet (Institute of Marine Research) (2026). Cetacean abundance estimates from NILS surveys. <i>IMR</i>.<br><br>Annual abundance estimates from line-transect surveys.<br><br><a href="https://www.hi.no/en/hi/temasider/species" target="_blank" rel="noopener">Open source</a></span>
+    </span>).</p>
+
+            <h3>Project</h3>
+            <p style="font-size:11px;color:#99a8bf">
+                Built by <a href="https://www.linkedin.com/in/almazermilov/" target="_blank" rel="noopener">Almaz Ermilov</a>
+                in Oslo, April 2026. MIT licensed, free to fork.
+            </p>
+            <p style="font-size:11px">
+                <a href="https://github.com/AlmazErmilov/coexisting-with-whales" target="_blank" rel="noopener">GitHub repository</a>
+                &nbsp;·&nbsp;
+                <a href="https://coexisting-with-birds.no/" target="_blank" rel="noopener">Coexisting with Birds (sister project)</a>
+                &nbsp;·&nbsp;
+                <a href="https://www.hubocean.earth/" target="_blank" rel="noopener">HUB Ocean (inspiration)</a>
+            </p>
+            <p style="color:#555;font-size:10px;margin-top:12px;text-align:center">
+                All data from open sources. Code is open source under MIT.
+            </p>
+<h2>Saved sample and place names</h2><p>The bundled GBIF sample was committed in April 2026. The original retrieval timestamp is unavailable. Its 9,996 observations span multiple years and use monthly quotas; month coverage is not seasonal abundance. Saving a browser snapshot does not refresh these observations.</p><p>Place names come from <a href="https://www.geonames.org/">GeoNames</a>, under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. The local extract covers populated places in Norway. External OpenStreetMap and EMODnet tiles are not stored by the application snapshot.</p></main></body></html>

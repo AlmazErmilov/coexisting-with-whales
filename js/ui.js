@@ -1,3 +1,4 @@
+import { whaleThumbnail } from './whale-images.js';
 // DOM updates: filters, species list, toggles.
 
 import {
@@ -21,8 +22,10 @@ export const FILTER_PREDICATES = {
 // Shared state references (set by app.js via initUI).
 let map, heatLayer, pointsLayer, allData, currentView, regionLayer, confidenceMode;
 let lastFiltered = [];
+let onFiltersChange = () => {};
 
 export function initUI(state) {
+    onFiltersChange = state.onFiltersChange || (() => {});
     map = state.map;
     heatLayer = state.heatLayer;
     pointsLayer = state.pointsLayer;
@@ -83,7 +86,7 @@ export function applyFilters() {
         const speciesCounts = new Map();
         filtered.forEach(o => speciesCounts.set(o.species, (speciesCounts.get(o.species) || 0) + 1));
 
-        const step = Math.max(1, Math.floor(filtered.length / MAX_RENDERED_POINTS));
+        const step = Math.max(1, Math.ceil(filtered.length / MAX_RENDERED_POINTS));
         for (let i = 0; i < filtered.length; i += step) {
             const d = filtered[i];
             const marker = L.circleMarker([d.lat, d.lon], {
@@ -111,7 +114,7 @@ export function applyFilters() {
             const statsHtml = `<br><span style="color:#888;font-size:11px;border-top:1px solid rgba(255,255,255,0.15);display:block;margin-top:4px;padding-top:4px">${region ? escapeHtml(region) + ' · ' : ''}${sCount} obs of this species in view (${pct}%)</span>`;
 
             marker.bindPopup(
-                `<b style="font-style:italic">${escapeHtml(d.species)}</b>${cnHtml}${rlHtml}${riskHtml}` +
+                `<button class="popup-species" data-whale-details="${escapeHtml(d.species)}">${whaleThumbnail(d.species)}<b style="font-style:italic">${escapeHtml(d.species)}</b></button>${cnHtml}${rlHtml}${riskHtml}` +
                 `<br>Month: ${MONTH_NAMES[d.month] || '?'}` +
                 (d.country ? `<br>Country: ${escapeHtml(d.country)}` : '') +
                 (d.dataset ? `<br><span style="color:#888;font-size:10px">${escapeHtml(d.dataset)}</span>` : '') +
@@ -126,6 +129,7 @@ export function applyFilters() {
     }
 
     updateSpeciesList(filtered);
+    onFiltersChange();
 }
 
 export function updateSpeciesList(data) {
@@ -154,10 +158,10 @@ export function updateSpeciesList(data) {
             ? `<span class="alt-tag" style="color:${riskColor}" title="Strike risk: ${risk}">${riskIcon}</span>`
             : '';
         return `
-            <div class="species-item" data-species="${escapeHtml(name)}">
-                <span class="species-name">${badge}${escapeHtml(name)}${riskHtml}</span>
+            <button type="button" class="species-item" data-whale-details="${escapeHtml(name)}">${whaleThumbnail(name)}
+                <span class="species-name">${badge}${escapeHtml(COMMON_NAMES[name]?.en || name)}${riskHtml}<small><i>${escapeHtml(name)}</i></small></span>
                 <span class="species-count">${count}</span>
-            </div>`;
+            </button>`;
     }).join('');
 }
 

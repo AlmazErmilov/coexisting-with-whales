@@ -1,0 +1,15 @@
+import {readFileSync,writeFileSync,readdirSync,existsSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {resolve,join} from 'node:path';
+const root=resolve(import.meta.dirname,'..');
+const walk=directory=>readdirSync(join(root,directory),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(join(directory,e.name)):[join(directory,e.name)]).sort();
+const core=['./','index.html','about.html','docs/whale-images.html','assets/whales/illustration-placeholder.svg','assets/favicon.svg', ...walk('js'),...walk('css'),...walk('data'),...walk('fonts'),...walk('assets/vendor').filter(p=>/\.(js|css|png)$/.test(p))].filter(p=>p==='./'||existsSync(join(root,p)));
+const photos=existsSync(join(root,'assets/whales'))?walk('assets/whales').filter(p=>/\.(jpg|jpeg|png|svg|webp)$/i.test(p)):[];
+let worker=readFileSync(join(root,'service-worker.js'),'utf8');
+const hash=createHash('sha256');
+for(const p of [...core.filter(p=>p!=='./'),...photos].sort())hash.update(p).update(readFileSync(join(root,p)));
+hash.update(worker.replace(/const VERSION = '[^']+';/,"const VERSION = '__VERSION__';").replace(/const CORE = \[[\s\S]*?\];/,'const CORE = [];').replace(/const PHOTOS = \[[\s\S]*?\];/,'const PHOTOS = [];'));
+const version='whales-'+hash.digest('hex').slice(0,16);
+worker=worker.replace(/const VERSION = '[^']+';/,`const VERSION = '${version}';`).replace(/const CORE = \[[\s\S]*?\];/,`const CORE = ${JSON.stringify(core,null,4)};`).replace(/const PHOTOS = \[[\s\S]*?\];/,`const PHOTOS = ${JSON.stringify(photos,null,4)};`);
+writeFileSync(join(root,'service-worker.js'),worker);
+console.log(`Snapshot ${version}: ${core.length} core assets, ${photos.length} optional images.`);

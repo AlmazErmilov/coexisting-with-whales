@@ -1,5 +1,13 @@
 # Progress log
 
+## 2026-10-07: marine diagrams and offline atlas
+
+Added a fullscreen replayable marine introduction, animated visual help and responsive vessel speed diagrams. Species cards provide local licensed photos, sourced facts and sample summaries. City labels stay above the heatmap. Controls use nearly square corners and compact mobile layouts.
+
+Removed CDN script dependencies, adopted public OpenStreetMap tiles and added an atomic local snapshot without a database. Historical observation age is separate from browser save date. Corrected port calculations to follow filters and show unknown when no observations are available. External map and shipping failures have visible status messages.
+
+Moved detailed methodology to an indexable about page, updated metadata and sitemap and restricted deployment to public assets. Validation covers models, input escaping, offline reload, responsive diagrams, keyboard navigation, filters and photo cards.
+
 ## 2026-04-28 - ship density restyling and heatmap clean up
 
 Pulled the EMODnet vessel density layer away from its default green-yellow-red rainbow into a single-hue overlay so it stops competing with the teal-orange whale heatmap, tightened the heatmap to remove open-ocean ghost spots and added a matching legend block.
