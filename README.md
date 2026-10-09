@@ -10,6 +10,8 @@ Interactive atlas of sampled cetacean observations, ports and shipping in Norweg
 
 The GitHub Pages URL https://almazermilov.github.io/coexisting-with-whales/ redirects to the canonical domain above.
 
+The whale mark reuses the existing generic whale silhouette from [the placeholder SVG](assets/whales/illustration-placeholder.svg), recoloured to match the map. The source artwork is dedicated to CC0 1.0.
+
 A sister project to [Coexisting with Birds](https://coexisting-with-birds.no/), inspired in part by the [HUB Ocean](https://www.hubocean.earth/) initiative and the Mesh Oslo "what else can you build" prompt.
 
 ## Quick start
