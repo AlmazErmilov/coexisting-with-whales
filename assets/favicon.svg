@@ -1,22 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
-  <title>Coexisting with Whales</title>
-  <desc>A rising humpback whale with curved flukes and a long pectoral fin.</desc>
-  <defs>
-    <linearGradient id="sea" x1="12" y1="8" x2="147" y2="156" gradientUnits="userSpaceOnUse"><stop stop-color="#11333e"/><stop offset="1" stop-color="#06151d"/></linearGradient>
-    <linearGradient id="body" x1="53" y1="49" x2="116" y2="113" gradientUnits="userSpaceOnUse"><stop stop-color="#d1f9ed"/><stop offset=".58" stop-color="#83d6c9"/><stop offset="1" stop-color="#3c999c"/></linearGradient>
-    <linearGradient id="fin" x1="100" y1="87" x2="67" y2="129" gradientUnits="userSpaceOnUse"><stop stop-color="#d5faee"/><stop offset="1" stop-color="#77c9c1"/></linearGradient>
-  </defs>
-  <path fill="url(#sea)" d="M0 0H160V160H0Z"/>
+ <defs>
+  <linearGradient id="sea" x1="12" y1="8" x2="148" y2="152" gradientUnits="userSpaceOnUse"><stop stop-color="#102f3a"/><stop offset="1" stop-color="#06141b"/></linearGradient>
+  <linearGradient id="body" x1="48" y1="45" x2="128" y2="108" gradientUnits="userSpaceOnUse"><stop stop-color="#cbf6e9"/><stop offset=".58" stop-color="#84d3c8"/><stop offset="1" stop-color="#438e98"/></linearGradient>
+ </defs>
+ <path fill="url(#sea)" d="M0 0h160v160H0z"/>
 
-  <path class="surface" d="M21 48H37M78 48H109M136 48H144" stroke="#dcaf72" stroke-width="1.2"/>
-  <path d="M40 76C26 69 18 54 17 37C31 40 43 50 48 63C44 46 49 32 60 24C64 44 61 60 53 73C70 62 85 56 99 55C104 50 107 45 113 43L116 55C132 55 143 61 147 70C153 81 147 91 134 98C119 106 99 108 82 103C67 100 56 89 45 83L40 76Z" fill="url(#body)" stroke="#c6f7e9" stroke-width="1.4" stroke-linejoin="round"/>
-  <path d="M47 75C62 81 83 88 102 89C98 107 82 126 63 130C70 117 78 106 80 96" fill="url(#fin)" stroke="#c6f7e9" stroke-width="1.3" stroke-linejoin="round"/>
+ <path d="M18 47h124" stroke="#d3ad78" stroke-width="1"/>
+ <!-- One continuous silhouette: paired flukes, short dorsal rise and rounded head. -->
+ <path d="M42 77c-13-5-23-16-28-31 14 4 26 13 34 23-4-16 0-29 10-38 7 15 6 31-2 44 13-10 31-17 50-18 6-4 12-10 19-15l-3 15c14-1 25 5 30 15 6 12 0 23-13 29-16 8-36 8-56 3-15-3-27-11-37-20-10 8-22 19-36 19 7-12 17-21 32-26Z" fill="url(#body)" stroke="#c4f4e8" stroke-width="1.5" stroke-linejoin="round"/>
+ <!-- Long, narrow pectoral fin, clearly attached beneath the body. -->
+ <path d="M76 92c7 8 10 21 9 34-.4 5-2 10-5 15-4-13-11-27-17-39 4-3 8-7 13-10Z" fill="#a2e4d9" stroke="#d3f7ed" stroke-width="1.2" stroke-linejoin="round"/>
+ <!-- Fine baleen throat folds, kept away from the eye and smile-like curves. -->
 
-  <circle cx="134" cy="70" r="1.7" fill="#102e38"/>
-  <circle cx="134.4" cy="69.6" r=".5" fill="#f3d6a8"/>
-
-  <g class="breath" stroke="#dfba83" stroke-width="1.25" stroke-linecap="round">
-    <path d="M123 47C125 39 122 32 117 28M125 42C129 33 134 30 138 31"/>
-    <path d="M113 24L112 21M139 26L142 25" opacity=".55"/>
-  </g>
+ <circle cx="137" cy="69" r="1.3" fill="#102e38"/>
+ <path d="M126 46c2-7 0-12-4-17m8 14c3-7 7-10 11-10" stroke="#d6b181" stroke-width="1.2" stroke-linecap="round"/>
 </svg>

@@ -1,32 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
-  <title>Coexisting with Whales</title>
-  <desc>A humpback whale rising through a marine chart, with curved flukes, a long pectoral fin and engraved throat pleats.</desc>
-  <defs>
-    <linearGradient id="sea" x1="12" y1="8" x2="147" y2="156" gradientUnits="userSpaceOnUse"><stop stop-color="#11333e"/><stop offset="1" stop-color="#06151d"/></linearGradient>
-    <linearGradient id="body" x1="53" y1="49" x2="116" y2="113" gradientUnits="userSpaceOnUse"><stop stop-color="#d1f9ed"/><stop offset=".58" stop-color="#83d6c9"/><stop offset="1" stop-color="#3c999c"/></linearGradient>
-    <linearGradient id="fin" x1="100" y1="87" x2="67" y2="129" gradientUnits="userSpaceOnUse"><stop stop-color="#d5faee"/><stop offset="1" stop-color="#77c9c1"/></linearGradient>
-  </defs>
-  <path fill="url(#sea)" d="M0 0H160V160H0Z"/>
-  <g class="chart" stroke="#80c5c2" stroke-width=".7">
-    <path opacity=".12" d="M40 15V145M80 15V145M120 15V145M15 40H145M15 80H145M15 120H145"/>
-    <path opacity=".4" d="M12 30V12H30M130 12H148V30M148 130V148H130M30 148H12V130"/>
-    <path opacity=".3" d="M77 12H83M80 9V15M77 148H83M80 145V151"/>
-    <path opacity=".26" stroke-dasharray="2 4" d="M24 119C58 142 117 127 139 101"/>
-  </g>
-  <path class="surface" d="M21 48H37M78 48H109M136 48H144" stroke="#dcaf72" stroke-width="1.2"/>
-  <path d="M40 76C26 69 18 54 17 37C31 40 43 50 48 63C44 46 49 32 60 24C64 44 61 60 53 73C70 62 85 56 99 55C104 50 107 45 113 43L116 55C132 55 143 61 147 70C153 81 147 91 134 98C119 106 99 108 82 103C67 100 56 89 45 83L40 76Z" fill="url(#body)" stroke="#c6f7e9" stroke-width="1.4" stroke-linejoin="round"/>
-  <path d="M47 75C62 81 83 88 102 89C98 107 82 126 63 130C70 117 78 106 80 96" fill="url(#fin)" stroke="#c6f7e9" stroke-width="1.3" stroke-linejoin="round"/>
-  <g class="engraving" stroke="#17434a" stroke-linecap="round">
-    <path d="M111 83C124 86 137 81 143 75" stroke-width="1.8"/>
-    <path d="M111 89C125 92 137 85 145 80M109 95C122 97 136 90 143 85M106 100C119 103 132 96 138 91" stroke-width="1" opacity=".65"/>
-    <path d="M26 45C37 54 42 63 44 70M56 35C56 48 54 59 50 68M75 118C87 109 91 100 93 94" stroke-width="1" opacity=".55"/>
-    <path d="M59 77C73 68 89 63 101 63" stroke-width="1" opacity=".35"/>
-  </g>
-  <circle cx="134" cy="70" r="1.7" fill="#102e38"/>
-  <circle cx="134.4" cy="69.6" r=".5" fill="#f3d6a8"/>
-  <g class="detail" fill="#28616a"><circle cx="127" cy="59.2" r="1"/><circle cx="134" cy="61.6" r="1"/><circle cx="140" cy="65.3" r=".8"/></g>
-  <g class="breath" stroke="#dfba83" stroke-width="1.25" stroke-linecap="round">
-    <path d="M123 47C125 39 122 32 117 28M125 42C129 33 134 30 138 31"/>
-    <path d="M113 24L112 21M139 26L142 25" opacity=".55"/>
-  </g>
+ <defs>
+  <linearGradient id="sea" x1="12" y1="8" x2="148" y2="152" gradientUnits="userSpaceOnUse"><stop stop-color="#102f3a"/><stop offset="1" stop-color="#06141b"/></linearGradient>
+  <linearGradient id="body" x1="48" y1="45" x2="128" y2="108" gradientUnits="userSpaceOnUse"><stop stop-color="#cbf6e9"/><stop offset=".58" stop-color="#84d3c8"/><stop offset="1" stop-color="#438e98"/></linearGradient>
+ </defs>
+ <path fill="url(#sea)" d="M0 0h160v160H0z"/>
+ <g class="chart" stroke="#80c5c2" stroke-width=".7">
+  <path d="M40 15v130M80 15v130M120 15v130M15 40h130M15 80h130M15 120h130" opacity=".11"/>
+  <path d="M12 30V12h18m100 0h18v18m0 100v18h-18m-100 0H12v-18" opacity=".35"/>
+  <path d="M80 9v6m0 130v6" opacity=".28"/>
+  <path d="M22 121c35 19 94 10 117-18" stroke-dasharray="2 4" opacity=".2"/>
+ </g>
+ <path d="M18 47h124" stroke="#d3ad78" stroke-width="1"/>
+ <!-- One continuous silhouette: paired flukes, short dorsal rise and rounded head. -->
+ <path d="M42 77c-13-5-23-16-28-31 14 4 26 13 34 23-4-16 0-29 10-38 7 15 6 31-2 44 13-10 31-17 50-18 6-4 12-10 19-15l-3 15c14-1 25 5 30 15 6 12 0 23-13 29-16 8-36 8-56 3-15-3-27-11-37-20-10 8-22 19-36 19 7-12 17-21 32-26Z" fill="url(#body)" stroke="#c4f4e8" stroke-width="1.5" stroke-linejoin="round"/>
+ <!-- Long, narrow pectoral fin, clearly attached beneath the body. -->
+ <path d="M76 92c7 8 10 21 9 34-.4 5-2 10-5 15-4-13-11-27-17-39 4-3 8-7 13-10Z" fill="#a2e4d9" stroke="#d3f7ed" stroke-width="1.2" stroke-linejoin="round"/>
+ <!-- Fine baleen throat folds, kept away from the eye and smile-like curves. -->
+ <g class="engraving" stroke="#28666b" stroke-linecap="round" opacity=".7">
+  <path d="M112 83c9 2 17 .5 24-3M111 88c9 2 17 1 25-3M108 93c8 2 16 2 23-1" stroke-width=".9"/>
+  <path d="M54 38c2 13 1 24-4 33M27 53c8 6 13 13 16 21M69 82c8-6 17-10 26-12" stroke-width=".8" opacity=".55"/>
+ </g>
+ <circle cx="137" cy="69" r="1.3" fill="#102e38"/>
+ <path d="M126 46c2-7 0-12-4-17m8 14c3-7 7-10 11-10" stroke="#d6b181" stroke-width="1.2" stroke-linecap="round"/>
 </svg>
