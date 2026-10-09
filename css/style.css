@@ -1062,3 +1062,9 @@ button, input, select, .modal, .panel, .view-btn, .rl-badge, .control-btn,
 .ocean-diagram__heading,.ocean-readouts,.ocean-key,.ocean-diagram__caveat,.ocean-species,.ocean-method {grid-column:1/-1;}
 .ocean-diagram__heading{grid-row:1}.ocean-readouts{grid-row:2}.ocean-diagram__scene{grid-column:1;grid-row:3}.ocean-diagram__curve{grid-column:2;grid-row:3;max-height:300px;}
 }
+
+/* The emblem keeps its own ocean field so its engraving works in both themes. */
+.brand-mark { width:60px; height:60px; flex:0 0 60px; background:none; box-shadow:none; border:1px solid var(--border-strong); }
+@media(max-width:400px){.brand-mark{width:52px;height:52px;flex-basis:52px;}}
+.brand-row { grid-template-columns:auto minmax(0,1fr); }
+.snapshot-refresh { display:block; margin:8px 0 12px; padding:7px 10px; color:var(--accent); background:var(--bg-control); border:1px solid var(--border-strong); font:10px 'Roboto Mono',monospace; cursor:pointer; }

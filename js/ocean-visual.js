@@ -150,7 +150,7 @@ export function initOceanIntro() {
     root.className = 'ocean-intro';
     const id = `ocean-intro-${++sequence}`;
     root.innerHTML = `<section class="ocean-intro__card" id="${id}-card" role="dialog" aria-modal="true" aria-labelledby="${id}-title" aria-describedby="${id}-caption" tabindex="-1" hidden>
-        <div class="ocean-intro__topline"><span>Coexisting with whales</span><button class="ocean-intro__close" type="button" aria-label="Dismiss introduction">×</button></div>
+        <div class="ocean-intro__topline"><span class="ocean-intro__brand"><img src="assets/whale-emblem.svg" alt="" width="36" height="36">Coexisting with whales</span><button class="ocean-intro__close" type="button" aria-label="Dismiss introduction">×</button></div>
         <div class="ocean-intro__composition"><header><p class="ocean-intro__eyebrow">Norway · whales &amp; vessels</p><h2 id="${id}-title">Room to surface.</h2></header>
         ${introDrawing(id)}${introDrawing(id, true)}
         <footer><p>Shared waters.</p><button class="ocean-intro__explore" type="button">Explore the map <span aria-hidden="true">↗</span></button></footer></div>

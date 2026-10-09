@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/favicon.svg" alt="Coexisting with Whales icon" width="92" height="92">
+  <img src="assets/whale-emblem.svg" alt="Coexisting with Whales icon" width="92" height="92">
 </p>
 
 # Coexisting with Whales

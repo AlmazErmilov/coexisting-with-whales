@@ -1,7 +1,7 @@
 /* Versioned, same-origin application snapshot. No third party tiles are stored.
  * ASVS 1.2.2: cache only an explicit allowlist of paths from our own origin.
  */
-const VERSION = 'whales-4d07dbff75199405';
+const VERSION = 'whales-749a31ebf0adc0df';
 const SNAPSHOT_KEY = '__snapshot_info__';
 const CORE = [
     "./",
@@ -10,6 +10,7 @@ const CORE = [
     "docs/whale-images.html",
     "assets/whales/illustration-placeholder.svg",
     "assets/favicon.svg",
+    "assets/whale-emblem.svg",
     "js/app.js",
     "js/city-labels.js",
     "js/data.js",
