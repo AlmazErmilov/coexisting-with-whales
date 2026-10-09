@@ -1,5 +1,10 @@
 # Progress log
 
+## 2026-10-09: reuse the existing whale silhouette
+
+Replaced the custom whale drawing with the existing generic whale silhouette from `assets/whales/illustration-placeholder.svg`. Kept its outline and flipper, then adjusted color and scale for the site mark. Updated the favicon, touch icon, offline snapshot and README source credit.
+
+
 ## 2026-10-07: whale emblem
 
 Replaced the original whale mark with a vector emblem based on curved flukes, a long pectoral fin and engraved throat pleats. A restrained marine chart frame connects it to the site diagrams. The header and fullscreen introduction share the detailed asset. The favicon uses a simplified silhouette, with matching PNG and Apple touch exports. The local snapshot includes the new emblem.
